@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff; /* Fondo blanco */
+    margin: 20px;
+    color: #040404; /* Texto negro */
+}
+
+.container {
+    border: 2px solid #040404; /* Borde negro */
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #040404; /* Dorado suave */
+    text-align: center;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff; /* Fondo blanco */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #040404; /* Texto negro */
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #040404; /* Borde negro */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #040404; /* Línea negra */
+    margin: 20px 0;
+}
+
+button {
+    background-color: #efb810; /* Dorado suave */
+    color: #040404; /* Texto negro */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #d3bf8d; /* Dorado más oscuro */
+}
+
+#resultadoCotizacion {
+    margin-top: 20px;
+    color: #040404; /* Texto negro */
+}
+
+.centered-button {
+    display: block;
+    margin: 20px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #040404; /* Borde negro */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #efb810; /* Dorado suave */
+    color: #040404; /* Texto negro */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.styled-title {
+    color: #040404; /* Texto negro */
+    font-size: 28px;
+    text-align: center;
+}
+
+/* Estilos adicionales para las secciones */
+.section-title {
+    color: #efb810; /* Dorado suave */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.section-box {
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #efb810; /* Borde dorado */
+}
+
+
+.fieldset-hidden {
+    display: none;
+}
