@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cotización de Carpas</title>
+    <!--Codigo css-->
     <link rel="stylesheet" href="css/styles.css">
-
-
 </head>
+
 <body>
 
     <h2 class="styled-title">Cotizador de Eventos "La Cubierta"</h2>
-
-
-    
+        <!--DATOS DEL CLIENTE-->
         <form id="quoteForm">
                 <h2 onclick="toggleSection('DatosClienteSection')">Datos de Cliente</h2>
                 <fieldset id="DatosClienteSection" class="fieldset-hidden">
@@ -32,88 +30,111 @@
     
                 <label for="correo">Correo Electrónico:</label>
                 <input type="email" id="correo" name="correo">
-            </fieldset>
- 
-
+                </fieldset>
 <hr>
-
+    <!--CARPAS-->
     <form id="quoteForm">
         <h2 onclick="toggleSection('CarpasSection')">Carpas</h2>
         <fieldset id="CarpasSection" class="fieldset-hidden">
 
         <label for="carpas3x4">Cantidad de carpas 3x4(30$):</label>
-        <input type="number" id="carpas3x4" name="carpas3x4" min="0" value="0">
+        <input type="number" id="carpas3x4" name="carpas3x4" min="0" >
         <br>
 
         <label for="carpas4x6">Cantidad de carpas 4x6(35$):</label>
-        <input type="number" id="carpas4x6" name="carpas4x6" min="0" value="0">
+        <input type="number" id="carpas4x6" name="carpas4x6" min="0">
         <br>
 
         <label for="carpas6x6">Cantidad de carpas 6x6(40$):</label>
-        <input type="number" id="carpas6x6" name="carpas6x6" min="0" value="0">
+        <input type="number" id="carpas6x6" name="carpas6x6" min="0">
         <br>
 
         <label for="carpas6x8">Cantidad de carpas 6x8(50$):</label>
-        <input type="number" id="carpas6x8" name="carpas6x8" min="0" value="0">
+        <input type="number" id="carpas6x8" name="carpas6x8" min="0" >
         <br>
         
         </fieldset>
 
         <hr> <!-- Línea separadora -->
-
+        <!--PAREDES-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('ParedesSection')">Paredes</h2>
             <fieldset id="ParedesSection" class="fieldset-hidden">
 
                 <label for="Paredes3">Cantidad de paredes de 3 metros(3$):</label>
-                <input type="number" id="paredes3" name="paredes3" min="0" value="0">
+                <input type="number" id="paredes3" name="paredes3" min="0">
                 <br>
         
                 <label for="paredes4">Cantidad de paredes de 4 metros(4$):</label>
-                <input type="number" id="paredes4" name="paredes4" min="0" value="0">
+                <input type="number" id="paredes4" name="paredes4" min="0" >
                 <br>
 
                 <label for="paredes6">Cantidad de paredes de 6 metros(6$):</label>
-                <input type="number" id="paredes6" name="paredes6" min="0" value="0">
+                <input type="number" id="paredes6" name="paredes6" min="0">
                 <br>
 
         </fieldset>
 
- 
-
         <hr> <!-- Línea separadora -->
+        <!--MESAS-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('MesasSection')">Mesas</h2>
             <fieldset id="MesasSection" class="fieldset-hidden">
 
                 <label for="mesas">Cantidad de mesas (4$):</label>
-                <input type="number" id="mesas" name="mesas" min="0" value="0">
+                <input type="number" id="mesas" name="mesas" min="0" >
                 <br>
         
                 <label for="mesasVestidas">Cantidad de mesas vestidas (7.5$):</label>
-                <input type="number" id="mesasVestidas" name="mesasVestidas" min="0" value="0">
+                <input type="number" id="mesasVestidas" name="mesasVestidas" min="0">
                 <br>
 
         </fieldset>
+        <hr> <!-- Línea separadora -->
+        <!--MANTELERIA-->
+        <form id="quoteForm">
+        <h2 onclick="toggleSection('ManteleriaSection')">Manteleria</h2>
+        <fieldset id="ManteleriaSection" class="fieldset-hidden">
+
+            <label for="vestidura">Cantidad de vestidura de las sillas (0.75$):</label>
+            <input type="number" id="vestidura" name="vestidura" min="0" >
+            <br>
+    
+            <label for="lazo">Cantidad de lazos (0.25$):</label>
+            <input type="number" id="lazo" name="lazo" min="0" >
+            <br>
+
+            <label for="mantel">Cantidad de manteles (3.5$):</label>
+            <input type="number" id="mantel" name="mantel" min="0">
+            <br>
+            <label for="cubreMantel">Cantidad de cubre menteles (1$):</label>
+            <input type="number" id="cubreMantel" name="cubreMantel" min="0">
+
+
+    </fieldset>
 
 
         <hr> <!-- Línea separadora -->
-
+        <!--SILLAS-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('SillasSection')">Sillas</h2>
             <fieldset id="SillasSection" class="fieldset-hidden">
 
                 <label for="sillasSinVestir">Cantidad de sillas sin vestir (0.4$):</label>
-                <input type="number" id="sillasSinVestir" name="sillasSinVestir" min="0" value="0">
+                <input type="number" id="sillasSinVestir" name="sillasSinVestir" min="0" >
                 <br>
         
                 <label for="sillasSinVestir">Cantidad de sillas sin vestir (0.3$):</label>
-                <input type="number" id="sillasSinVestirclientes" name="sillasSinVestirclientes" min="0" value="0">
+                <input type="number" id="sillasSinVestirclientes" name="sillasSinVestirclientes" min="0" >
                 <br>
         
                 <label for="sillasVestidas">Cantidad de sillas vestidas (1$):</label>
-                <input type="number" id="sillasVestidas" name="sillasVestidas" min="0" value="0">
+                <input type="number" id="sillasVestidas" name="sillasVestidas" min="0">
                 <br>
+
+                <label for="sillasVestidasclientes">Cantidad de sillas vestidas (1.2$):</label>
+                <input type="number" id="sillasVestidasclientes" name="sillasVestidasclientes" min="0">
+
 
         </fieldset>
 
@@ -121,13 +142,14 @@
 
 
         <hr> <!-- Línea separadora -->
+        <!--PISTA DE BAILE-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('PistadeBaileSection')">Pista de Baile</h2>
             <fieldset id="PistadeBaileSection" class="fieldset-hidden">
 
                 <!-- Pista de Baile -->
                 <label for="pistaTableros">Número de tableros para la pista de baile (7$ cada tablero):</label>
-                <input type="number" id="pistaTableros" name="pistaTableros" min="0" value="0">
+                <input type="number" id="pistaTableros" name="pistaTableros" min="0" >
                 <br>
 
         </fieldset>
@@ -135,18 +157,18 @@
 
 
         <hr> <!-- Línea separadora -->
-
+        <!--SILLAS Y MESAS PARA NIÑOS-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('SillasyMesasniniosSection')">Sillas y Mesas de Niños</h2>
             <fieldset id="SillasyMesasniniosSection" class="fieldset-hidden">
    
                 <!-- Sillas de Niños y Mesas de Niños -->
                 <label for="sillasNinos">Cantidad de sillas de niños (0.3$):</label>
-                <input type="number" id="sillasNinos" name="sillasNinos" min="0" value="0">
+                <input type="number" id="sillasNinos" name="sillasNinos" min="0">
                 <br>
         
                 <label for="mesasNinos">Cantidad de mesas de niños (2$):</label>
-                <input type="number" id="mesasNinos" name="mesasNinos" min="0" value="0">
+                <input type="number" id="mesasNinos" name="mesasNinos" min="0" >
                 <br>
 
         </fieldset>
@@ -158,32 +180,40 @@
 
 
 
-
-        <h2 onclick="toggleSection('MobiliarioSection')">Mobiliario</h2>
+        <!--MOBILIARIO-->
+        <h2 onclick="toggleSection('MobiliarioSection')">Mobiliario y otros</h2>
         <fieldset id="MobiliarioSection" class="fieldset-hidden">
 
             <label for="mobiliario">Mobiliario de arco para globos y mesitas (25$):</label>
-                <input type="number" id="mobiliario" name="mobiliario" min="0" value="0">
+                <input type="number" id="mobiliario" name="mobiliario" min="0" >
                 <br>
+            <label for="triciclo"> Triciclo de decoracion (3$):</label>
+            <input type="number" id="triciclo" name="triciclo" min="0">
+
+            <label for="bandeja"> Cantidad de bandejas (0.5$):</label>
+            <input type="number" id="bandeja" name="bandeja" min="0">
+
+            <label for="jarra"> Cantidad de Jarras (0.25$):</label>
+            <input type="number" name="jarra" id="jarra" min="0">
         
         </fieldset>
 
    
 
         <hr> <!-- Línea separadora -->
-
+        <!--TRANSPORTE-->
         <form id="quoteForm">
             <h2 onclick="toggleSection('TransporteSection')">Transporte</h2>
             <fieldset id="TransporteSection" class="fieldset-hidden">
 
                 <label for="costoTransporte">Costo de transporte:</label>
-                <input type="number" id="costoTransporte" name="costoTransporte" min="0" value="0">
+                <input type="number" id="costoTransporte" name="costoTransporte" min="0">
                 <br>
 
         </fieldset>
         
 
-
+        <!--BOTON PARA CALCULAR-->
         <button type="button" onclick="calcularCotizacion()" class="centered-button">Calcular Cotización</button>
 
         <!--<label for="nombreCliente">Nombre:</label>
@@ -201,7 +231,8 @@
         <label for="correoCliente">Correo Electrónico:</label>
         <span id="correoCliente"></span>-->
 
-
+    
+    <!--TABLA DATOS DEL CLIENTE-->
     </form>
     <table id="datosClienteTabla">
         <tr>
@@ -223,10 +254,10 @@
         </tr>
       </table>
 
-
+      <!--TABLA DE COTIZACION-->
     <div id="resultadoCotizacion"></div>
 
-
+<!--Codigo Java Script-->
 <script src="js/script.js" defer></script>
 </body>
 </html>

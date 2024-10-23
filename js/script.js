@@ -32,14 +32,6 @@ function mostrarDetalleCotizacion(detalle, costoTotal) {
 
 
 
-
-
-
-
-
-
-
-
 function calcularCotizacion() {
 let n = 0;
     //precio carpas sin paredes
