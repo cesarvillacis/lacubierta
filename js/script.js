@@ -34,6 +34,14 @@ function mostrarDetalleCotizacion(detalle, costoTotal) {
 
 function calcularCotizacion() {
 let n = 0;
+    //datos de cliente
+    const nombreCliente = document.getElementById('nombre').value;
+    const cedulaCliente = document.getElementById('cedula').value;
+    const direccionCliente = document.getElementById('direccion').value;
+    const numeroCliente = document.getElementById('numero').value;
+    const correoCliente = document.getElementById('correo').value;
+
+    //COSTOS
     //precio carpas sin paredes
     const precioTecho3x4 = 30;
     const precioTecho4x6 = 35;
@@ -43,45 +51,68 @@ let n = 0;
     const precioPared3 = 3;
     const precioPared4 = 4;
     const precioPared6 = 6;
-    //precio mobiliario
-    const precioMobiliario=25;
     //precio mesas
     const precioMesa = 4;
     const precioMesaVestida = 7.5;
+    //manteleria
+    const precioVestiduraSilla = 0.75;
+    const precioLazos = 0.25;
+    const precioManteles = 3.5;
+    const precioCubreManteles = 1;
+
+    //precio mobiliario
+    const precioMobiliario=25;
+
     //precio sillas
     const precioSillaSinVestir = 0.4;
     const precioSillaSinVestirclientes = 0.3;
     const precioSillaVestida = 1;
+    const precioSillaVestidaNoClientes = 1.2;
     //precio pista de baile
     const precioPistaTablero = 7;
     //precio sillas y mesas para niños 
     const precioSillaNino = 0.3;
     const precioMesaNino = 2;
-    //datos de cliente
-    const nombreCliente = document.getElementById('nombre').value;
-    const cedulaCliente = document.getElementById('cedula').value;
-    const direccionCliente = document.getElementById('direccion').value;
-    const numeroCliente = document.getElementById('numero').value;
-    const correoCliente = document.getElementById('correo').value;
-
-    //obtiene la cantidad de articulos de el label
+    //costo transporte
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
+
+    //CANTIDAD DE ARTICULOS
+    //cantidad de carpas
     const cantidadCarpas3x4 = parseInt(document.getElementById('carpas3x4').value) || 0;
-    const cantidadParedes3 = parseInt(document.getElementById('paredes3').value) || 0;
-    const cantidadParedes4 = parseInt(document.getElementById('paredes4').value) || 0;
-    const cantidadParedes6 = parseInt(document.getElementById('paredes6').value) || 0;
     const cantidadCarpa4x6 = parseInt(document.getElementById('carpas4x6').value) || 0;
     const cantidadCarpa6x6 = parseInt(document.getElementById('carpas6x6').value) || 0;
     const cantidadCarpa6x8 = parseInt(document.getElementById('carpas6x8').value) || 0;
+
+    //cantidad de paredes
+    const cantidadParedes3 = parseInt(document.getElementById('paredes3').value) || 0;
+    const cantidadParedes4 = parseInt(document.getElementById('paredes4').value) || 0;
+    const cantidadParedes6 = parseInt(document.getElementById('paredes6').value) || 0;
+
+    //cantidad de mesas
     const cantidadMesas = parseInt(document.getElementById('mesas').value) || 0;
     const cantidadMesasVestidas = parseInt(document.getElementById('mesasVestidas').value) || 0;
+    //cantidad manteleria
+    const cantidadVestiduraSilla = parseInt(document.getElementById('vestidura').value) || 0;
+    const cantidadLazos = parseInt(document.getElementById('lazo').value) || 0;
+    const cantidadManteles = parseInt(document.getElementById('mantel').value) || 0;
+    const cantidadCubreManteles = parseInt(document.getElementById('cubreMantel').value) || 0;
+
+    //cantidad de sillas
     const cantidadSillasSinVestir = parseInt(document.getElementById('sillasSinVestir').value) || 0;
     const cantidadSillasVestidas = parseInt(document.getElementById('sillasVestidas').value) || 0;
+    const cantidadSillasSinVestirclientes = parseInt(document.getElementById('sillasSinVestirclientes').value) || 0;
+    const cantidadSillaVestidaNoClientes= parseInt(document.getElementById('sillasVestidasNoClientes').value) || 0;
+
+    //cantida de tableros de pista de baile
     const cantidadPistaTableros = parseInt(document.getElementById('pistaTableros').value) || 0;
+
+    //cantidad de silla y mesas para ninios
     const cantidadSillasNinos = parseInt(document.getElementById('sillasNinos').value) || 0;
     const cantidadMesasNinos = parseInt(document.getElementById('mesasNinos').value) || 0;
     const cantidadMobiliario = parseInt(document.getElementById('mobiliario').value) || 0;
-    const cantidadSillasSinVestirclientes = parseInt(document.getElementById('sillasSinVestirclientes').value) || 0;
+    
+    
+    //CALCULO DE COSTOS
     //costo total de carpas
     const costoCarpas3x4 = precioTecho3x4 * cantidadCarpas3x4;
     const costoCarpas4x6 = precioTecho4x6 * cantidadCarpa4x6;
@@ -93,7 +124,7 @@ let n = 0;
     const costoParedes6 = precioPared6 * cantidadParedes6;
     //costo total de mobiliario
     const costoMobiliario= precioMobiliario*cantidadMobiliario;
-    //costo toal de mesas, sillas  pista de baile
+    //costo total de mesas, sillas,  pista de baile
     const costoMesas = precioMesa * cantidadMesas;
     const costoMesasVestidas = precioMesaVestida * cantidadMesasVestidas;
     const costoSillasSinVestir = precioSillaSinVestir * cantidadSillasSinVestir;
@@ -102,6 +133,12 @@ let n = 0;
     const costoPistaTableros = precioPistaTablero * cantidadPistaTableros;
     const costoSillasNinos = precioSillaNino * cantidadSillasNinos;
     const costoMesasNinos = precioMesaNino * cantidadMesasNinos;
+    const costoSillaVestidaNoClientes = precioSillaVestidaNoClientes * cantidadSillaVestidaNoClientes;
+    //costo manteleria
+    const costoVestiduraSilla = precioVestiduraSilla * cantidadVestiduraSilla;
+    const costoLazos = precioLazos * cantidadLazos;
+    const costoManteles = precioManteles * cantidadManteles;
+    const costoCubreManteles = precioCubreManteles * cantidadCubreManteles;
 
     document.getElementById('nombreClienteTd').textContent = nombreCliente;
     document.getElementById('cedulaClienteTd').textContent = cedulaCliente;
@@ -116,7 +153,8 @@ let n = 0;
                        costoParedes4 + costoParedes6 + costoMesas + costoMesasVestidas +
                        costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
                        costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
-                       costoParedes3;
+                       costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles+
+                       costoSillaVestidaNoClientes;
                        
 
 
@@ -222,6 +260,62 @@ if (cantidadMesasVestidas > 0) {
     });
 }
 
+if (cantidadVestiduraSilla > 0){
+    n += 1;
+    const precioIndividualVestiduraSilla = precioVestiduraSilla;
+    const precioTotaVestiduraSilla = precioIndividualVestiduraSilla * cantidadVestiduraSilla;
+    const item = n.toString();
+    detalleCotizacion.push({
+        item: item,
+        producto: "Vestidura de las sillas",
+        cantidad: cantidadVestiduraSilla,
+        precioIndividual: precioIndividualVestiduraSilla,
+        precioTotal: precioTotaVestiduraSilla
+    });
+}
+
+if (cantidadLazos > 0){
+    n += 1;
+    const precioIndividualLazos = precioLazos;
+    const precioTotalLazos = precioIndividualLazos * cantidadLazos;
+    const item = n.toString();
+    detalleCotizacion.push({
+        item: item,
+        producto: "Lazos",
+        cantidad: cantidadLazos,
+        precioIndividual: precioIndividualLazos,
+        precioTotal: precioTotalLazos
+    });
+}
+
+if (cantidadManteles > 0){
+    n += 1;
+    const precioIndividualManteles = precioManteles;
+    const precioTotalManteles = precioIndividualManteles * cantidadManteles;
+    const item = n.toString();
+    detalleCotizacion.push({
+        item: item,
+        producto: "Manteles",
+        cantidad: cantidadManteles,
+        precioIndividual: precioIndividualManteles,
+        precioTotal: precioTotalManteles
+    });
+}
+
+if (cantidadCubreManteles > 0){
+    n += 1;
+    const precioIndividualCubreManteles = precioCubreManteles;
+    const precioTotalCubreManteles = precioIndividualCubreManteles * cantidadCubreManteles;
+    const item = n.toString();
+    detalleCotizacion.push({
+        item: item,
+        producto: "Cubre Manteles",
+        cantidad: cantidadCubreManteles,
+        precioIndividual: precioIndividualCubreManteles,
+        precioTotal: precioTotalCubreManteles
+    });
+}
+
 if (cantidadSillasSinVestir > 0) {
     n += 1;
     const precioIndividualSillaSinVestir = precioSillaSinVestir;
@@ -265,6 +359,20 @@ if (cantidadSillasVestidas > 0) {
         cantidad: cantidadSillasVestidas,
         precioIndividual: precioIndividualSillaVestida,
         precioTotal: precioTotalSillaVestida
+    });
+}
+if (cantidadSillaVestidaNoClientes > 0) {
+    n += 1;
+    const precioIndividualSillaVestidaNoCliente = precioSillaVestidaNoClientes;
+    const precioTotalSillaVestidaNoCliente = precioIndividualSillaVestidaNoCliente * cantidadSillaVestidaNoClientes;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Sillas Vestidas",
+        cantidad: cantidadSillaVestidaNoClientes,
+        precioIndividual: precioIndividualSillaVestidaNoCliente,
+        precioTotal: precioTotalSillaVestidaNoCliente
     });
 }
 
