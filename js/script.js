@@ -73,6 +73,11 @@ let n = 0;
     //precio sillas y mesas para niños 
     const precioSillaNino = 0.3;
     const precioMesaNino = 2;
+    //precio decoraciones
+    const precioTriciclo = 3;
+    const precioBandeja = 0.5;
+    const precioJarra = 0.25;
+
     //costo transporte
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
 
@@ -111,6 +116,10 @@ let n = 0;
     const cantidadMesasNinos = parseInt(document.getElementById('mesasNinos').value) || 0;
     const cantidadMobiliario = parseInt(document.getElementById('mobiliario').value) || 0;
     
+    //cantidad de tricilos, bandejas y jarras
+    const cantidadTriciclo = parseInt(document.getElementById('triciclo').value) || 0;
+    const cantidadBandeja = parseInt(document.getElementById('bandeja').value) || 0;
+    const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
     
     //CALCULO DE COSTOS
     //costo total de carpas
@@ -139,6 +148,10 @@ let n = 0;
     const costoLazos = precioLazos * cantidadLazos;
     const costoManteles = precioManteles * cantidadManteles;
     const costoCubreManteles = precioCubreManteles * cantidadCubreManteles;
+    //Decoracion y otro
+    const costoTriciclo = precioTriciclo * cantidadTriciclo;
+    const costoBandeja = precioBandeja * cantidadBandeja;
+    const costoJarra = precioJarra * cantidadJarra;
 
     document.getElementById('nombreClienteTd').textContent = nombreCliente;
     document.getElementById('cedulaClienteTd').textContent = cedulaCliente;
@@ -154,7 +167,7 @@ let n = 0;
                        costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
                        costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
                        costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles+
-                       costoSillaVestidaNoClientes;
+                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra;
                        
 
 
@@ -168,7 +181,7 @@ const resultadoElement = document.getElementById('resultadoCotizacion');
 
 const detalleCotizacion = [];
 
-//agrega los elementos a la tabla para er los detalles 
+//agrega los elementos a la tabla para ver los detalles 
  if (cantidadCarpas3x4 > 0) {
         n += 1;
         const precioIndividual = precioTecho3x4;
@@ -494,6 +507,50 @@ if (cantidadParedes6 > 0) {
         precioTotal: precioTotalPared6
     });
 }
+//Mobiliario y otros
+if (cantidadTriciclo > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualTriciclo = precioTriciclo;
+    const precioTotalTriciclo = precioIndividualTriciclo * cantidadTriciclo;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Triciclo de Decoración",
+        cantidad: cantidadTriciclo,
+        precioIndividual: precioIndividualTriciclo,
+        precioTotal: precioTotalTriciclo
+    });
+}
+if (cantidadBandeja> 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualBandeja = precioBandeja;
+    const precioTotalBandejas= precioIndividualBandeja * cantidadBandeja;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Bandejas",
+        cantidad: cantidadBandeja,
+        precioIndividual: precioIndividualBandeja,
+        precioTotal: precioTotalBandejas
+    });
+}
+if (cantidadJarra > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualJarra = precioJarra;
+    const precioTotalJarra = precioIndividualJarra * cantidadJarra;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Jarras",
+        cantidad: cantidadJarra,
+        precioIndividual: precioIndividualJarra,
+        precioTotal: precioTotalJarra
+    });
+}
+
 
     //enseña el detalle de la cotizacion
    mostrarDetalleCotizacion(detalleCotizacion, costoTotal);
