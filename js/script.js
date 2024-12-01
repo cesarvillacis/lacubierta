@@ -80,7 +80,8 @@ let n = 0;
 
     //costo transporte
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
-
+    //dias adicionales
+    const valorxDia = parseInt(document.getElementById('valorxDia').value) || 0;
     //CANTIDAD DE ARTICULOS
     //cantidad de carpas
     const cantidadCarpas3x4 = parseInt(document.getElementById('carpas3x4').value) || 0;
@@ -120,7 +121,8 @@ let n = 0;
     const cantidadTriciclo = parseInt(document.getElementById('triciclo').value) || 0;
     const cantidadBandeja = parseInt(document.getElementById('bandeja').value) || 0;
     const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
-    
+    const cantidadDias = parseInt(document.getElementById('dias').value) || 0;
+
     //CALCULO DE COSTOS
     //costo total de carpas
     const costoCarpas3x4 = precioTecho3x4 * cantidadCarpas3x4;
@@ -152,6 +154,8 @@ let n = 0;
     const costoTriciclo = precioTriciclo * cantidadTriciclo;
     const costoBandeja = precioBandeja * cantidadBandeja;
     const costoJarra = precioJarra * cantidadJarra;
+    //costo dias adicionales
+    const costoDias = valorxDia * cantidadDias;
 
     document.getElementById('nombreClienteTd').textContent = nombreCliente;
     document.getElementById('cedulaClienteTd').textContent = cedulaCliente;
@@ -160,14 +164,14 @@ let n = 0;
     document.getElementById('correoClienteTd').textContent = correoCliente;
 
 
-
+    
     //costo total de todo
     const costoTotal = costoCarpas3x4 + costoCarpas4x6 + costoCarpas6x6 + costoCarpas6x8 +
                        costoParedes4 + costoParedes6 + costoMesas + costoMesasVestidas +
                        costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
                        costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
                        costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles+
-                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra;
+                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra + costoDias;
                        
 
 
@@ -449,7 +453,7 @@ if (cantidadMobiliario > 0) {
     });
 }
 
-
+//TRANSPORTE
 if (costoTransporte > 0) {
     n += 1;
     const item = n.toString();
@@ -460,6 +464,20 @@ if (costoTransporte > 0) {
         cantidad: 1,  // Puedes considerar el transporte como un único servicio
         precioIndividual: costoTransporte,
         precioTotal: costoTransporte
+    });
+}
+//DIAS
+
+if (cantidadDias > 0) {
+    n += 1;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Dias Adicionales",
+        cantidad: cantidadDias,  
+        precioIndividual: valorxDia,
+        precioTotal: costoDias
     });
 }
 

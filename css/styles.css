@@ -120,3 +120,16 @@ tr:nth-child(even) {
 .fieldset-hidden {
     display: none;
 }
+
+/*ALinea de manera horizontal el paratdado de dias dicionales y valor por dia*/
+.form-group {
+    
+    padding: 0px;             /* Agrega un espaciado interior de 10px */
+    width: 220px; /* Define un ancho fijo */
+}
+/* Para una disposición horizontal de los divs (de izquierda a derecha) */
+.fieldset-container {
+    display: flex;
+    flex-direction: row;  /* Coloca los divs de forma horizontal */
+    gap: 40px;
+}
