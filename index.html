@@ -6,6 +6,7 @@
     <title>Cotización de Carpas</title>
     <!--Codigo css-->
     <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
 <body>
@@ -235,6 +236,7 @@
 
         <!--BOTON PARA CALCULAR-->
         <button type="button" onclick="calcularCotizacion()" class="centered-button">Calcular Cotización</button>
+        
 
         <!--<label for="nombreCliente">Nombre:</label>
         <span id="nombreCliente"></span>
@@ -276,9 +278,12 @@
 
       <!--TABLA DE COTIZACION-->
     <div id="resultadoCotizacion"></div>
+    <button id="downloadPDF" onclick="generarPDF()">Generar PDF</button>
 
 <!--Codigo Java Script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/script.js" defer></script>
+<!--<script src="js/pdf.js"></script>-->
 </body>
 </html>
 
