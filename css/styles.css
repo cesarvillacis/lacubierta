@@ -121,15 +121,28 @@ tr:nth-child(even) {
     display: none;
 }
 
-/*ALinea de manera horizontal el paratdado de dias dicionales y valor por dia*/
 .form-group {
-    
-    padding: 0px;             /* Agrega un espaciado interior de 10px */
-    width: 220px; /* Define un ancho fijo */
+    padding: 10px;             /* Espaciado interno ajustable */
+    width: 100%;               /* Ancho relativo al contenedor */
+    max-width: 220px;          /* Máximo ancho en dispositivos grandes */
+    box-sizing: border-box;    /* Asegura que el padding no afecte el ancho total */
 }
-/* Para una disposición horizontal de los divs (de izquierda a derecha) */
+
 .fieldset-container {
     display: flex;
-    flex-direction: row;  /* Coloca los divs de forma horizontal */
-    gap: 40px;
+    flex-direction: row;  /* Mantén los elementos en fila en pantallas grandes */
+    gap: 40px;            /* Espaciado entre elementos */
+    flex-wrap: wrap;      /* Permite que los elementos bajen a la siguiente fila si no caben */
+}
+
+/* Estilos específicos para pantallas pequeñas */
+@media (max-width: 768px) {
+    .form-group {
+        width: 100%;          /* Los elementos ocupan todo el ancho disponible */
+        max-width: none;      /* Elimina el límite de ancho */
+    }
+    .fieldset-container {
+        flex-direction: column; /* Cambia a disposición vertical */
+        gap: 20px;              /* Reduce el espacio entre elementos */
+    }
 }
