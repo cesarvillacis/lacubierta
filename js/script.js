@@ -54,6 +54,8 @@ let n = 0;
     //precio mesas
     const precioMesa = 4;
     const precioMesaVestida = 7.5;
+    const precioMesa_4_5_dolar = 4.5;
+    const precioMesaVestida_8_dolar = 8; 
     //manteleria
     const precioVestiduraSilla = 0.75;
     const precioLazos = 0.25;
@@ -82,6 +84,7 @@ let n = 0;
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
     //dias adicionales
     const valorxDia = parseInt(document.getElementById('valorxDia').value) || 0;
+    
     //CANTIDAD DE ARTICULOS
     //cantidad de carpas
     const cantidadCarpas3x4 = parseInt(document.getElementById('carpas3x4').value) || 0;
@@ -96,7 +99,9 @@ let n = 0;
 
     //cantidad de mesas
     const cantidadMesas = parseInt(document.getElementById('mesas').value) || 0;
+    const cantidadMesas_4_5_dolar = parseInt(document.getElementById('mesas_4_5_dolar').value) || 0;
     const cantidadMesasVestidas = parseInt(document.getElementById('mesasVestidas').value) || 0;
+    const cantidadMesasVestidas_8_dolar = parseInt(document.getElementById('mesasVestidas_8_dolar').value) || 0;
     //cantidad manteleria
     const cantidadVestiduraSilla = parseInt(document.getElementById('vestidura').value) || 0;
     const cantidadLazos = parseInt(document.getElementById('lazo').value) || 0;
@@ -135,16 +140,22 @@ let n = 0;
     const costoParedes6 = precioPared6 * cantidadParedes6;
     //costo total de mobiliario
     const costoMobiliario= precioMobiliario*cantidadMobiliario;
-    //costo total de mesas, sillas,  pista de baile
+    //costo total de mesas
     const costoMesas = precioMesa * cantidadMesas;
+    const costoMesas_4_5_dolar = precioMesa_4_5_dolar * cantidadMesas_4_5_dolar;
     const costoMesasVestidas = precioMesaVestida * cantidadMesasVestidas;
+    const costoMesasVestidas_8_dolar = precioMesaVestida_8_dolar * cantidadMesasVestidas_8_dolar;
+    //costo total sillas
     const costoSillasSinVestir = precioSillaSinVestir * cantidadSillasSinVestir;
     const costoSillasSinVestirclientes = precioSillaSinVestirclientes * cantidadSillasSinVestirclientes;
     const costoSillasVestidas = precioSillaVestida * cantidadSillasVestidas;
+    const costoSillaVestidaNoClientes = precioSillaVestidaNoClientes * cantidadSillaVestidaNoClientes;
+    //costo total pista de baile
     const costoPistaTableros = precioPistaTablero * cantidadPistaTableros;
+    //costo total sillas y mesas de ninios
     const costoSillasNinos = precioSillaNino * cantidadSillasNinos;
     const costoMesasNinos = precioMesaNino * cantidadMesasNinos;
-    const costoSillaVestidaNoClientes = precioSillaVestidaNoClientes * cantidadSillaVestidaNoClientes;
+
     //costo manteleria
     const costoVestiduraSilla = precioVestiduraSilla * cantidadVestiduraSilla;
     const costoLazos = precioLazos * cantidadLazos;
@@ -171,7 +182,8 @@ let n = 0;
                        costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
                        costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
                        costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles+
-                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra + costoDias;
+                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra + costoDias + costoMesas_4_5_dolar +
+                       costoMesasVestidas_8_dolar;
                        
 
 
@@ -184,7 +196,7 @@ const resultadoElement = document.getElementById('resultadoCotizacion');
     resultadoElement.innerHTML = `<p>El costo total de la cotización es: $${costoTotal}</p>`;
 
 const detalleCotizacion = [];
-
+//carpas
 //agrega los elementos a la tabla para ver los detalles 
  if (cantidadCarpas3x4 > 0) {
         n += 1;
@@ -246,7 +258,7 @@ if (cantidadCarpa6x8 > 0) {
 }
 
 
- 
+ //mesas
 if (cantidadMesas > 0) {
     n += 1;
     const precioIndividualMesa = precioMesa;
@@ -262,6 +274,18 @@ if (cantidadMesas > 0) {
     });
 }
 
+if (cantidadMesas_4_5_dolar > 0) {
+    n += 1;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesas",
+        cantidad: cantidadMesas_4_5_dolar,
+        precioIndividual: precioMesa_4_5_dolar,
+        precioTotal: costoMesas_4_5_dolar
+    });
+}
 if (cantidadMesasVestidas > 0) {
     n += 1;
     const precioIndividualMesaVestida = precioMesaVestida;
@@ -277,6 +301,19 @@ if (cantidadMesasVestidas > 0) {
     });
 }
 
+if (cantidadMesasVestidas_8_dolar > 0) {
+    n += 1;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesas Vestidas",
+        cantidad: cantidadMesasVestidas_8_dolar,
+        precioIndividual: precioMesaVestida_8_dolar,
+        precioTotal: costoMesasVestidas_8_dolar
+    });
+}
+//manteleria
 if (cantidadVestiduraSilla > 0){
     n += 1;
     const precioIndividualVestiduraSilla = precioVestiduraSilla;
