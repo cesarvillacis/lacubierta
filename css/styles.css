@@ -138,7 +138,7 @@ tr:nth-child(even) {
 
 
 /* Ajustar columnas en pantallas menores a 480px */
-@media (max-width: 400px) {
+@media (max-width: 452px) {
 
      /* Estilos generales */
 /****************************************************/
@@ -180,6 +180,7 @@ tr:nth-child(even) {
 #resultadoCotizacion td {
     padding: 4px; /* Añade espacio interno */
     text-align: left; /* Alinea el texto a la izquierda */
+    /*height: 25px;*/
     /*border: 1px solid #ddd; /* Añade un borde a las celdas */
 }
     /* Reducir ancho de la primera columna (Items) */
@@ -197,8 +198,8 @@ tr:nth-child(even) {
     /* Aumentar ancho de la segunda columna (Producto) */
     #resultadoCotizacion th:nth-child(2), 
     #resultadoCotizacion td:nth-child(2) {
-        width: 23%; /* Aumenta el ancho al 40% del contenedor */
-        font-size: 16px; /* Mantén un tamaño de texto adecuado */
+        width: 28%; /* Aumenta el ancho al 40% del contenedor */
+        font-size: 15px; /* Mantén un tamaño de texto adecuado */
     }
     #resultadoCotizacion tr:first-child th:nth-child(2), 
     #resultadoCotizacion tr:first-child td:nth-child(2) {
@@ -227,13 +228,25 @@ tr:nth-child(even) {
         width: 15%; /* Reduce el ancho al 15% del contenedor */
         text-align: center; /* Centra el texto */
         font-size: 15px; /* Ajusta el tamaño del texto */
+        padding: 3px;
     }
     /*Solo el titulo de la cuarta columna*/
     #resultadoCotizacion tr:first-child th:nth-child(4), 
     #resultadoCotizacion tr:first-child td:nth-child(4) {
     font-size: 10px; /* Ajusta el tamaño del texto */
     }
+
+    /*Solo el titulo de la cuarta columna*/
+    #resultadoCotizacion tr:first-child th:nth-child(5), 
+    #resultadoCotizacion tr:first-child td:nth-child(5) {
+    font-size: 13px; /* Ajusta el tamaño del texto */
+    }
     
+    #resultadoCotizacion th:nth-child(5), 
+    #resultadoCotizacion td:nth-child(5) {
+        width: 28%; /* Reduce el ancho al 15% del contenedor */
+        font-size: 15px;
+    }
 
     
     /* Ajustar encabezados para reducir texto */
