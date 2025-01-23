@@ -20,7 +20,20 @@ function generarPDF() {
 
     // Agregar texto al PDF
    // doc.text('Cotización de Evento', 20, 20);
-
+    //-------------DIRECCION--------
+    doc.setFont('courier');  // Cambia a Times en negrita
+    doc.setFontSize(11);           // Cambia el tamaño de la fuente
+    doc.text('Calle José de la Cuadra, E5-132. Amaguaña.', 80, 20);
+    //-------------TITULO ALQUILER DE CARPAS-----------
+    // Cambiar tamaño y tipografía para un texto específico
+    doc.setFont('courier', 'bold');  // Cambia a Times en negrita
+    doc.setFontSize(20);           // Cambia el tamaño de la fuente
+    doc.text('ALQUILER DE CARPAS "LA CUBIERTA"', 62, 33); // Texto más grande y en negrita
+    //-------------COTIZACION-----------
+    doc.setFont('courier', 'italic');  // Cambia a Times en negrita
+    doc.setFontSize(20);           // Cambia el tamaño de la fuente
+    doc.text('Cotización', 105, 45); // Texto más grande y en negrita 
+ // Texto más grande y en negrita
     // Cargar el archivo Base64
     fetch('./img/lacubierta.base64') // Ruta al archivo Base64
         .then(response => response.text())  // Leerlo como texto
@@ -32,8 +45,22 @@ function generarPDF() {
             console.log(imgBase64);
 
             // Añadir la imagen al PDF en la posición deseada (ajustar las coordenadas según sea necesario)
-            doc.addImage(imgBase64, 'PNG', 10, 10, 40, 40); // Ajusta las posiciones y tamaños de la imagen
+            doc.addImage(imgBase64, 'PNG', 10, 10, 40, 40); // Ajusta las posiciones y tamaños de la 
+            
+            // Dibujar un cuadrado o rectángulo sin relleno
+            doc.setDrawColor(0, 0, 0); // Color de la línea (negro en este caso)
+            doc.setLineWidth(0.5); // Grosor de la línea
+            // Dibujar un rectángulo con bordes redondeados
+            doc.roundedRect(60, 10, 140, 40, 10, 10);  // Coordenadas (60, 10), ancho 140, alto 40, radio 10 en las esquinasS' para stroke)
+             
+            //TABLA INFO DE CLIENTE
 
+
+
+
+
+
+            //TABLA COTIZACIONES
             // Ahora puedes agregar la tabla (como lo tenías antes)
             const tabla = document.querySelector('#resultadoCotizacion table');
             if (!tabla) {
@@ -55,7 +82,7 @@ function generarPDF() {
             doc.autoTable({
                 head: cabecera,
                 body: cuerpo,
-                startY: 60,  // Cambié la posición Y para que la tabla no se superponga con la imagen
+                startY: 100,  // Cambié la posición Y para que la tabla no se superponga con la imagen
                 theme: 'grid', // Usa el tema 'grid' para bordes por defecto
                 headStyles: {
                     fillColor: [239, 184, 16],  // Color de fondo para la cabecera (rojo)
@@ -70,10 +97,10 @@ function generarPDF() {
                     halign: 'center', // Alineación de las celdas en el cuerpo
                     valign: 'middle'  // Alineación vertical
                 },
-                margin: { top: 30, left: 20, right: 20 },
+                margin: { top: 30, left: 10, right: 10 },
                 tableWidth: 'auto',
                 styles: {
-                    cellPadding: 5, // Espaciado entre celdas
+                    cellPadding: 3, // Espaciado entre celdas
                     lineWidth: 0.2,  // Grosor de las líneas de la tabla
                     lineColor: [0, 0, 0] // Color de las líneas
                 }
