@@ -53,11 +53,59 @@ function generarPDF() {
             // Dibujar un rectángulo con bordes redondeados
             doc.roundedRect(60, 10, 140, 40, 10, 10);  // Coordenadas (60, 10), ancho 140, alto 40, radio 10 en las esquinasS' para stroke)
              
-            //TABLA INFO DE CLIENTE
+//TABLA INFO DE CLIENTE
+const clienteTabla = document.querySelector('#datosClienteTabla');
+if (!clienteTabla) {
+    console.error('No se encontró la tabla dentro del div.');
+    return;
+}
+                        // Función para obtener la fecha en formato "Martes 17 de Enero del 2025"
+                        function obtenerFechaFormateada() {
+                            const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                            return new Date().toLocaleDateString('es-ES', opciones);
+                        }
+            
+                        // Extraer datos de la tabla de cliente
+                        const filasCliente = Array.from(clienteTabla.querySelectorAll('tr'));
+                        const datosCliente = filasCliente.map(fila => {
+                            const celdas = Array.from(fila.querySelectorAll('th, td'));
+                            return celdas.map(celda => celda.innerText);
+                        });
+                // ** Extraer los datos del cliente **
+    const nombre = document.querySelector('#nombreClienteTd')?.innerText || "No especificado";
+    const cedula = document.querySelector('#cedulaClienteTd')?.innerText || "No especificado";
+    const direccion = document.querySelector('#direccionClienteTd')?.innerText || "No especificado";
+    const telefono = document.querySelector('#numeroClienteTd')?.innerText || "No especificado";
+    const correo = document.querySelector('#correoClienteTd')?.innerText || "No especificado";
+    const fecha = obtenerFechaFormateada();
 
+    // ** Dibujar los datos del cliente en el PDF **
+    let yPos = 60;
+    doc.setFont('courier', 'bold');
+    doc.setFontSize(14);
+    doc.text("Datos del Cliente", 10, yPos);
+    yPos += 12;
 
+    doc.setFont('courier', 'normal');
+    doc.setFontSize(12);
+    doc.text(`Nombre: ${nombre}`, 20, yPos);
+    yPos += 6;
 
+    /*doc.text(`Cédula: ${cedula}`, 20, yPos);
+    yPos += 6;*/
 
+    doc.text(`Dirección: ${direccion}`, 20, yPos);
+    yPos += 6;
+
+    doc.text(`Teléfono: ${telefono}`, 20, yPos);
+    yPos += 11;
+
+    /*doc.text(`Correo: ${correo}`, 20, yPos);
+    yPos += 6;*/
+
+    doc.setFont('bold');
+    doc.text(`Fecha: ${fecha}`, 10, yPos);
+    
 
 
             //TABLA COTIZACIONES
@@ -77,6 +125,22 @@ function generarPDF() {
             // Separar cabecera y cuerpo
             const cabecera = [datos[0]]; // Primera fila
             const cuerpo = datos.slice(1); // El resto
+            // ---- Extraer el Total desde la tabla ----
+            let totalTexto = "";
+            const ultimaFila = cuerpo[cuerpo.length - 1]; 
+
+            if (ultimaFila && ultimaFila[0].toLowerCase().includes("total")) {
+                totalTexto = ultimaFila[ultimaFila.length - 1]; // Última celda de la fila total
+                cuerpo.pop(); // Eliminar la fila del total de la tabla
+            }
+
+            // ---- Agregar la fila del Total ----
+            cuerpo.push([
+                { content: "Total", colSpan: cabecera[0].length - 1, styles: { halign: "left", fontStyle: "bold", fillColor: [255, 255, 255] } },
+                { content: totalTexto, styles: { fontStyle: "bold", fillColor: [255, 255, 255] } }
+            ]);
+
+
 
             // Personalizar la tabla con bordes y colores
             doc.autoTable({
@@ -85,7 +149,7 @@ function generarPDF() {
                 startY: 100,  // Cambié la posición Y para que la tabla no se superponga con la imagen
                 theme: 'grid', // Usa el tema 'grid' para bordes por defecto
                 headStyles: {
-                    fillColor: [239, 184, 16],  // Color de fondo para la cabecera (rojo)
+                    fillColor: [239, 184, 16],  // Color de fondo para la cabecera (amarillo)
                     textColor: [0, 0, 0],  // Color de texto (negro)
                     fontSize: 12,
                     halign: 'center' // Alineación del texto en la cabecera
@@ -105,6 +169,7 @@ function generarPDF() {
                     lineColor: [0, 0, 0] // Color de las líneas
                 }
             });
+
 
             // Guarda el PDF generado
             doc.save('cotizacion_evento.pdf');
