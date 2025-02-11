@@ -18,7 +18,7 @@ function generarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Agregar texto al PDF
+    /*// Agregar texto al PDF
    // doc.text('Cotización de Evento', 20, 20);
     //-------------DIRECCION--------
     doc.setFont('courier');  // Cambia a Times en negrita
@@ -32,9 +32,34 @@ function generarPDF() {
     //-------------COTIZACION-----------
     doc.setFont('courier', 'italic');  // Cambia a Times en negrita
     doc.setFontSize(20);           // Cambia el tamaño de la fuente
-    doc.text('Cotización', 105, 45); // Texto más grande y en negrita 
+    doc.text('Cotización', 105, 45); // Texto más grande y en negrita */
  // Texto más grande y en negrita
     // Cargar el archivo Base64
+
+
+    // Cuadro de color #ffb831 que ocupa todo el ancho
+    doc.setFillColor(255, 184, 49);
+    doc.rect(0, 0, doc.internal.pageSize.getWidth(), 60, 'F'); // Altura definible aquí
+
+    // Puntitos decorativos
+    doc.setFillColor(0, 0, 0);
+
+    // Lado izquierdo (3x9 puntos)
+    for (let i = 0; i < 14; i++) {
+        for (let j = 0; j < 4; j++) {
+            doc.circle(3 + j * 4, 3 + i * 4, 0.2, 'F');
+        }
+    }
+
+    // Lado derecho (3x9 puntos)
+    const pageWidth = doc.internal.pageSize.getWidth();
+    for (let i = 0; i < 14; i++) {
+        for (let j = 0; j < 4; j++) {
+            doc.circle(pageWidth - 3 - j * 4, 3 + i * 4, 0.2, 'F');
+        }
+    }
+
+
     fetch('./img/lacubierta.base64') // Ruta al archivo Base64
         .then(response => response.text())  // Leerlo como texto
         .then(base64 => {
@@ -45,15 +70,16 @@ function generarPDF() {
             console.log(imgBase64);
 
             // Añadir la imagen al PDF en la posición deseada (ajustar las coordenadas según sea necesario)
-            doc.addImage(imgBase64, 'PNG', 10, 10, 40, 40); // Ajusta las posiciones y tamaños de la 
-            
-            // Dibujar un cuadrado o rectángulo sin relleno
-            doc.setDrawColor(0, 0, 0); // Color de la línea (negro en este caso)
-            doc.setLineWidth(0.5); // Grosor de la línea
-            // Dibujar un rectángulo con bordes redondeados
-            doc.roundedRect(60, 10, 140, 40, 10, 10);  // Coordenadas (60, 10), ancho 140, alto 40, radio 10 en las esquinasS' para stroke)
-             
-//TABLA INFO DE CLIENTE
+            doc.addImage(imgBase64, 'PNG', 20, 15, 30, 30); // Ajusta las posiciones y tamaños de la 
+
+            // Agregar texto al lado del logo
+// Establecer la fuente en negrita para que las letras sean más gruesas
+doc.setFont("helvetica", "bold");  // Usar la fuente helvetica en estilo "bold" (negrita)
+doc.setFontSize(16);  // Tamaño de la fuente
+
+// Agregar texto con letras más gruesas
+doc.text("LA CUBIERTA", 60, 30);  // Posición X, Y
+/*//TABLA INFO DE CLIENTE
 const clienteTabla = document.querySelector('#datosClienteTabla');
 if (!clienteTabla) {
     console.error('No se encontró la tabla dentro del div.');
@@ -93,7 +119,7 @@ if (!clienteTabla) {
 
     /*doc.text(`Cédula: ${cedula}`, 20, yPos);
     yPos += 6;*/
-
+/*
     doc.text(`Dirección: ${direccion}`, 20, yPos);
     yPos += 6;
 
@@ -102,10 +128,10 @@ if (!clienteTabla) {
 
     /*doc.text(`Correo: ${correo}`, 20, yPos);
     yPos += 6;*/
-
+/*
     doc.setFont('bold');
     doc.text(`Fecha: ${fecha}`, 10, yPos);
-    
+  */
 
 
             //TABLA COTIZACIONES
@@ -136,8 +162,8 @@ if (!clienteTabla) {
 
             // ---- Agregar la fila del Total ----
             cuerpo.push([
-                { content: "Total", colSpan: cabecera[0].length - 1, styles: { halign: "left", fontStyle: "bold", fillColor: [255, 255, 255] } },
-                { content: totalTexto, styles: { fontStyle: "bold", fillColor: [255, 255, 255] } }
+                { content: "Total:", colSpan: cabecera[0].length - 1, styles: { halign: "left", fontStyle: "bold", fillColor: [242, 242, 242] } },
+                { content: totalTexto, styles: { fontStyle: "bold", fillColor:[242, 242, 242] } }
             ]);
 
 
@@ -149,13 +175,13 @@ if (!clienteTabla) {
                 startY: 100,  // Cambié la posición Y para que la tabla no se superponga con la imagen
                 theme: 'grid', // Usa el tema 'grid' para bordes por defecto
                 headStyles: {
-                    fillColor: [239, 184, 16],  // Color de fondo para la cabecera (amarillo)
+                    fillColor: [255, 184, 49],  // Color de fondo para la cabecera (amarillo)
                     textColor: [0, 0, 0],  // Color de texto (negro)
                     fontSize: 12,
                     halign: 'center' // Alineación del texto en la cabecera
                 },
                 bodyStyles: {
-                    fillColor: [240, 240, 240],  // Color de fondo de las filas
+                    fillColor: [255, 255, 255],  // Color de fondo de las filas
                     textColor: [0, 0, 0],  // Color de texto (negro)
                     fontSize: 10,
                     halign: 'center', // Alineación de las celdas en el cuerpo
@@ -178,3 +204,5 @@ if (!clienteTabla) {
             console.error('Error al cargar el archivo Base64:', error);
         });
 }
+
+
