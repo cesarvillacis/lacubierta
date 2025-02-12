@@ -612,3 +612,12 @@ if (cantidadJarra > 0) {
     
 
 }
+
+//pdf
+document.addEventListener("DOMContentLoaded", function() {
+    const botonGenerarPDF = document.getElementById("downloadPDF");
+    
+    // Asegúrate de que la función esté correctamente vinculada
+    botonGenerarPDF.addEventListener("click", generarPDF);
+});
+
