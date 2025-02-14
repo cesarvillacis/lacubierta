@@ -1,18 +1,27 @@
-/*function generarPDF() {
-    console.log("Generando PDF..."); 
-    const { jsPDF } = window.jspdf;  // Asegurarte de que jsPDF esté cargado
-    const doc = new jsPDF();
-    doc.text('Cotización de Evento', 20, 20);
-    doc.autoTable({
-        html: '#resultadoCotizacion table', // ID de la tabla HTML que deseas renderizar
-        startY: 30               // Posición inicial de la tabla en el PDF
-    });
-    doc.save('cotizacion_evento.pdf');
-}*/
+function agregarImagen(doc, imagePath, x, y, width, height) {
+    fetch(imagePath)
+        .then(response => response.text())
+        .then(base64 => {
+            const imgBase64 = `data:image/png;base64,${base64.trim()}`;
+            doc.addImage(imgBase64, 'PNG', x, y, width, height);
+        })
+        .catch(error => console.error("Error al cargar la imagen:", error));
+}
+
+function importarFuente(doc, nombreFuente, estilo, rutaBase64, callback) {
+    fetch(rutaBase64)
+        .then(response => response.text())
+        .then(base64String => {
+            doc.addFileToVFS(nombreFuente + ".ttf", base64String);
+            doc.addFont(nombreFuente + ".ttf", nombreFuente, estilo);
+            callback(); // Llama a la siguiente acción después de importar la fuente
+        })
+        .catch(error => console.error('Error cargando la fuente:', error));
+}
 
 
 function generarPDF() {
-    console.log("Generando PDF...");
+    //console.log("Generando PDF...");
 
     // Crear la instancia de jsPDF
     const { jsPDF } = window.jspdf;
@@ -39,7 +48,7 @@ function generarPDF() {
             doc.circle(pageWidth - 3 - j * 4, 3 + i * 4, 0.2, 'F');
         }
     }
-    //decoracion negra
+    //decoracion negra superior
     // Franja negra
 doc.setFillColor(0, 0, 0);  // Negro
 doc.rect(149.9, 0, 60, 10, 'F');  // Franja negra sobre el fondo naranja
@@ -78,8 +87,20 @@ doc.rect(0, 287, 60.1, 10, 'F');  // Franja negra sobre el fondo amarillo inferi
 doc.setFillColor(0, 0, 0); // Color negro (RGB)
 doc.triangle(60, 287, 70, 297, 60, 297, 'F'); // Coordenadas (x1, y1, x2, y2, x3, y3), 'F' para rellenar
 
+//IMAGENES
+agregarImagen(doc, './img/ubi.base64', 20, 252, 5, 5);
 
+agregarImagen(doc, './img/whats.base64', 20, 262, 5, 5);
 
+//FUENTE
+// Importar la fuente desde el archivo base64
+importarFuente(doc, "LiterRegular", "normal", "./fonts/Liter-Regular.base64");
+
+// Luego, cuando necesites usarla
+doc.setFont("LiterRegular");
+doc.setFontSize(12);
+doc.text("Calle José de la Cuadra E5-132, Amaguaña.", 26, 256);
+doc.text("0987593512", 26, 266);
 
    
 
@@ -96,18 +117,8 @@ doc.line(45, 63, 200, 63);      // Línea de izquierda (20,30) a derecha (180,30
 doc.line(45, 75, 200, 75);  
 
 doc.line(45, 87, 200, 87); 
-
-    fetch('./img/lacubierta.base64') // Ruta al archivo Base64
-        .then(response => response.text())  // Leerlo como texto
-        .then(base64 => {
-            // Agregar el prefijo necesario para que jsPDF lo reconozca
-            const imgBase64 = `data:image/png;base64,${base64.trim()}`; // Eliminar espacios o saltos de línea innecesarios
-
-            // Verifica en la consola si el Base64 se está leyendo correctamente
-            console.log(imgBase64);
-
-            // Añadir la imagen al PDF en la posición deseada (ajustar las coordenadas según sea necesario)
-            doc.addImage(imgBase64, 'PNG', 20, 10, 30, 30); // Ajusta las posiciones y tamaños de la 
+//agrega el logo
+agregarImagen(doc, './img/lacubierta.base64', 20, 10, 30, 30);
 
    //TABLA INFO DE CLIENTE
    const clienteTabla = document.querySelector('#datosClienteTabla');
@@ -124,11 +135,11 @@ doc.line(45, 87, 200, 87);
                                return celdas.map(celda => celda.innerText);
                            });
                    // ** Extraer los datos del cliente **
-       const nombre = document.querySelector('#nombreClienteTd')?.innerText || "No especificado";
-       const cedula = document.querySelector('#cedulaClienteTd')?.innerText || "No especificado";
-       const direccion = document.querySelector('#direccionClienteTd')?.innerText || "No especificado";
-       const telefono = document.querySelector('#numeroClienteTd')?.innerText || "No especificado";
-       const correo = document.querySelector('#correoClienteTd')?.innerText || "No especificado";
+       const nombre = document.querySelector('#nombreClienteTd')?.innerText || "";
+       const cedula = document.querySelector('#cedulaClienteTd')?.innerText || "";
+       const direccion = document.querySelector('#direccionClienteTd')?.innerText || "";
+       const telefono = document.querySelector('#numeroClienteTd')?.innerText || "";
+       const correo = document.querySelector('#correoClienteTd')?.innerText || "";
    
        // ** Dibujar los datos del cliente en el PDF **
        /*let yPos = 60;
@@ -137,7 +148,8 @@ doc.line(45, 87, 200, 87);
        doc.text("Datos del Cliente", 10, yPos);
        yPos += 12;*/
        let yPos = 60;
-       doc.setFont("Helvetica", "normal");
+       doc.setFont("LiterRegular");
+       //doc.setFont("Helvetica", "normal");
        doc.setFontSize(12);
        doc.text(`${nombre}`, 45, yPos);
        yPos += 12;
@@ -230,7 +242,7 @@ doc.line(45, 87, 200, 87);
                doc.addFont("BebasNeue-Regular.ttf", "BebasNeue", "normal");
        
                // Verificar si la fuente se registró
-               console.log(doc.getFontList());
+               //console.log(doc.getFontList());
        
                // Aplicar la fuente
                doc.setFont("BebasNeue", "normal");
@@ -268,26 +280,24 @@ doc.line(45, 87, 200, 87);
     doc.text(`Fecha: ${fecha}`, 10, yPos);
     //cambia color a blanco
     doc.setTextColor(77, 77, 77);
-    doc.text(`DETALLES CUENTA`, 144, 260);
+    doc.text(`DETALLES CUENTA`, 110, 256);
     //cambia color a negro
     doc.setTextColor(0, 0, 0);
-    doc.text(`BANCO PICHINCHA`, 145, 267);
-    doc.text(`CTA.AHORROS: 3346943600`, 135, 274);
-    doc.text(`CI: 1709221160`, 147, 281);
-    doc.text(`PROPIETARIO: CESAR VILLACIS`, 135, 288);
-    //doc.text(`CORREO: marthita_carapaz@hotmail.com`, 125, 285);
+    doc.text(`BANCO PICHINCHA`, 110, 263);
+    doc.text(`CTA.AHORROS: 3346943600`, 110, 270);
+    doc.text(`CI: 1709221160`, 110, 277);
+    doc.text(`PROPIETARIO: CESAR VILLACIS`, 110, 284);
+    doc.text(`CORREO:`, 110, 291);
+    doc.setFont("Times", "bold");
+    doc.setFontSize(13);
+    doc.text(`marthita_carapaz@hotmail.com`, 126, 290);
    
 
                // Guardar el PDF
                doc.save('cotizacion_evento.pdf');
            })
            .catch(err => console.error("Error al cargar la fuente:", err));
-            
-           
-        })
-        .catch(error => {
-            console.error('Error al cargar el archivo Base64:', error);
-        });
+
 }
 
 
