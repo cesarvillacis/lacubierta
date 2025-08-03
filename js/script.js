@@ -1,4 +1,3 @@
-
 function toggleSection(sectionId) {
     var section = document.getElementById(sectionId);
     if (section.style.display === "none" || section.style.display === "") {
@@ -123,6 +122,23 @@ let n = 0;
     const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
     const cantidadDias = parseInt(document.getElementById('dias').value) || 0;
 
+    // Carpas con paredes (nuevos precios)
+    const precioCarpa3x4_3paredes = 40;
+    const precioCarpa4x6_3paredes = 56;
+    const precioCarpa6x6_3paredes = 58;
+    const precioCarpa6x8_3paredes = 72;
+
+    // Cantidades de carpas con paredes
+    const cantidadCarpa3x4_3paredes = parseInt(document.getElementById('carpa3x4_3paredes').value) || 0;
+    const cantidadCarpa4x6_3paredes = parseInt(document.getElementById('carpa4x6_3paredes').value) || 0;
+    const cantidadCarpa6x6_3paredes = parseInt(document.getElementById('carpa6x6_3paredes').value) || 0;
+    const cantidadCarpa6x8_3paredes = parseInt(document.getElementById('carpa6x8_3paredes').value) || 0;
+
+    // Cálculo de costos de carpas con paredes
+    const costoCarpa3x4_3paredes = 40 * cantidadCarpa3x4_3paredes;
+    const costoCarpa4x6_3paredes = 56 * cantidadCarpa4x6_3paredes;
+    const costoCarpa6x6_3paredes = 58 * cantidadCarpa6x6_3paredes;
+    const costoCarpa6x8_3paredes = 72 * cantidadCarpa6x8_3paredes;
     //CALCULO DE COSTOS
     //costo total de carpas
     const costoCarpas3x4 = precioTecho3x4 * cantidadCarpas3x4;
@@ -167,6 +183,7 @@ let n = 0;
     
     //costo total de todo
     const costoTotal = costoCarpas3x4 + costoCarpas4x6 + costoCarpas6x6 + costoCarpas6x8 +
+                       costoCarpa3x4_3paredes + costoCarpa4x6_3paredes + costoCarpa6x6_3paredes + costoCarpa6x8_3paredes +
                        costoParedes4 + costoParedes6 + costoMesas + costoMesasVestidas +
                        costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
                        costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
@@ -245,8 +262,64 @@ if (cantidadCarpa6x8 > 0) {
     });
 }
 
+// Carpas con paredes
+if (cantidadCarpa3x4_3paredes > 0) {
+    n += 1;
+    const precioIndividual = precioCarpa3x4_3paredes;
+    const precioTotal = precioIndividual * cantidadCarpa3x4_3paredes;
+    const item = n.toString();
 
- 
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 3x4 con 3 Paredes",
+        cantidad: cantidadCarpa3x4_3paredes,
+        precioIndividual: precioIndividual,
+        precioTotal: precioTotal
+    });
+}
+if (cantidadCarpa4x6_3paredes > 0) {
+    n += 1;
+    const precioIndividual = precioCarpa4x6_3paredes;
+    const precioTotal = precioIndividual * cantidadCarpa4x6_3paredes;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 4x6 con 3 Paredes",
+        cantidad: cantidadCarpa4x6_3paredes,
+        precioIndividual: precioIndividual,
+        precioTotal: precioTotal
+    });
+}
+if (cantidadCarpa6x6_3paredes > 0) {
+    n += 1;
+    const precioIndividual = precioCarpa6x6_3paredes;
+    const precioTotal = precioIndividual * cantidadCarpa6x6_3paredes;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 6x6 con 3 Paredes",
+        cantidad: cantidadCarpa6x6_3paredes,
+        precioIndividual: precioIndividual,
+        precioTotal: precioTotal
+    });
+}
+if (cantidadCarpa6x8_3paredes > 0) {
+    n += 1;
+    const precioIndividual = precioCarpa6x8_3paredes;
+    const precioTotal = precioIndividual * cantidadCarpa6x8_3paredes;
+    const item = n.toString();
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 6x8 con 3 Paredes",
+        cantidad: cantidadCarpa6x8_3paredes,
+        precioIndividual: precioIndividual,
+        precioTotal: precioTotal
+    });
+}
+
 if (cantidadMesas > 0) {
     n += 1;
     const precioIndividualMesa = precioMesa;
@@ -576,11 +649,123 @@ if (cantidadJarra > 0) {
 
 }
 
-//pdf
+// pdf
 document.addEventListener("DOMContentLoaded", function() {
     const botonGenerarPDF = document.getElementById("downloadPDF");
-    
-    // Asegúrate de que la función esté correctamente vinculada
-    botonGenerarPDF.addEventListener("click", generarPDF);
+    if (botonGenerarPDF) {
+        botonGenerarPDF.addEventListener("click", function() {
+            if (typeof generarPDF === "function") {
+                generarPDF();
+            } else {
+                alert("La función generarPDF no está definida o el archivo js/pdf.js no está cargado correctamente.");
+            }
+        });
+    }
+});
+
+// WhatsApp informe instalación
+document.addEventListener("DOMContentLoaded", function() {
+    const whatsappBtn = document.getElementById("whatsappSendBtn");
+    if (!whatsappBtn) return;
+
+    whatsappBtn.addEventListener("click", function() {
+        // Datos del cliente
+        const nombre = document.getElementById('nombre').value || '';
+        const numero = document.getElementById('numero').value || '';
+        const direccion = document.getElementById('direccion').value || '';
+        const cedula = document.getElementById('cedula').value || '';
+        const correo = document.getElementById('correo').value || '';
+        // Nuevos campos
+        const fechaInstalacion = document.getElementById('fechaInstalacion').value || '';
+        const hora = document.getElementById('horaInstalacion').value || '';
+        const referencia = document.getElementById('referencia').value || '';
+        const tipoPiso = document.getElementById('tipoPiso').value || '';
+
+        // Servicios seleccionados
+        let servicios = [];
+        const cantidadCarpas3x4 = parseInt(document.getElementById('carpas3x4').value) || 0;
+        const cantidadParedes3 = parseInt(document.getElementById('paredes3').value) || 0;
+        if (cantidadCarpas3x4 > 0) servicios.push(`carpa de 3x4 con ${cantidadParedes3} paredes`);
+        const cantidadCarpa4x6 = parseInt(document.getElementById('carpas4x6').value) || 0;
+        const cantidadParedes4 = parseInt(document.getElementById('paredes4').value) || 0;
+        if (cantidadCarpa4x6 > 0) servicios.push(`carpa de 4x6 con ${cantidadParedes4} paredes`);
+        const cantidadCarpa6x6 = parseInt(document.getElementById('carpas6x6').value) || 0;
+        const cantidadParedes6 = parseInt(document.getElementById('paredes6').value) || 0;
+        if (cantidadCarpa6x6 > 0) servicios.push(`carpa de 6x6 con ${cantidadParedes6} paredes`);
+        const cantidadCarpa6x8 = parseInt(document.getElementById('carpas6x8').value) || 0;
+        if (cantidadCarpa6x8 > 0) servicios.push(`carpa de 6x8`);
+        const cantidadMesas = parseInt(document.getElementById('mesas').value) || 0;
+        if (cantidadMesas > 0) servicios.push(`${cantidadMesas} mesas`);
+        const cantidadMesasVestidas = parseInt(document.getElementById('mesasVestidas').value) || 0;
+        if (cantidadMesasVestidas > 0) servicios.push(`${cantidadMesasVestidas} mesas vestidas`);
+        const cantidadSillasSinVestir = parseInt(document.getElementById('sillasSinVestir').value) || 0;
+        if (cantidadSillasSinVestir > 0) servicios.push(`${cantidadSillasSinVestir} sillas sin vestir`);
+        const cantidadSillasSinVestirclientes = parseInt(document.getElementById('sillasSinVestirclientes').value) || 0;
+        if (cantidadSillasSinVestirclientes > 0) servicios.push(`${cantidadSillasSinVestirclientes} sillas sin vestir (clientes)`);
+        const cantidadSillasVestidas = parseInt(document.getElementById('sillasVestidas').value) || 0;
+        if (cantidadSillasVestidas > 0) servicios.push(`${cantidadSillasVestidas} sillas vestidas`);
+        const cantidadSillaVestidaNoClientes = parseInt(document.getElementById('sillasVestidasNoClientes').value) || 0;
+        if (cantidadSillaVestidaNoClientes > 0) servicios.push(`${cantidadSillaVestidaNoClientes} sillas vestidas (no clientes)`);
+        const cantidadVestiduraSilla = parseInt(document.getElementById('vestidura').value) || 0;
+        if (cantidadVestiduraSilla > 0) servicios.push(`${cantidadVestiduraSilla} vestiduras de silla`);
+        const cantidadLazos = parseInt(document.getElementById('lazo').value) || 0;
+        if (cantidadLazos > 0) servicios.push(`${cantidadLazos} lazos`);
+        const cantidadManteles = parseInt(document.getElementById('mantel').value) || 0;
+        if (cantidadManteles > 0) servicios.push(`${cantidadManteles} manteles`);
+        const cantidadCubreManteles = parseInt(document.getElementById('cubreMantel').value) || 0;
+        if (cantidadCubreManteles > 0) servicios.push(`${cantidadCubreManteles} cubre manteles`);
+        const cantidadPistaTableros = parseInt(document.getElementById('pistaTableros').value) || 0;
+        if (cantidadPistaTableros > 0) servicios.push(`${cantidadPistaTableros} tableros de pista de baile`);
+        const cantidadSillasNinos = parseInt(document.getElementById('sillasNinos').value) || 0;
+        if (cantidadSillasNinos > 0) servicios.push(`${cantidadSillasNinos} sillas de niños`);
+        const cantidadMesasNinos = parseInt(document.getElementById('mesasNinos').value) || 0;
+        if (cantidadMesasNinos > 0) servicios.push(`${cantidadMesasNinos} mesas de niños`);
+        const cantidadMobiliario = parseInt(document.getElementById('mobiliario').value) || 0;
+        if (cantidadMobiliario > 0) servicios.push(`${cantidadMobiliario} mobiliario de arco para globos y mesitas`);
+        const cantidadTriciclo = parseInt(document.getElementById('triciclo').value) || 0;
+        if (cantidadTriciclo > 0) servicios.push(`${cantidadTriciclo} triciclo de decoración`);
+        const cantidadBandeja = parseInt(document.getElementById('bandeja').value) || 0;
+        if (cantidadBandeja > 0) servicios.push(`${cantidadBandeja} bandejas`);
+        const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
+        if (cantidadJarra > 0) servicios.push(`${cantidadJarra} jarras`);
+        const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
+        if (costoTransporte > 0) servicios.push(`transporte`);
+        const cantidadDias = parseInt(document.getElementById('dias').value) || 0;
+        if (cantidadDias > 0) servicios.push(`${cantidadDias} días adicionales`);
+        // Sector (puedes usar dirección o agregar un campo específico)
+        const sector = direccion;
+
+        // Mensaje final
+
+        // Formatear fecha con día de la semana
+        function formatFecha(fechaStr) {
+            if (!fechaStr) return "";
+            const fechaObj = new Date(fechaStr);
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const diaSemana = dias[fechaObj.getDay()];
+            const dia = String(fechaObj.getDate()).padStart(2, '0');
+            const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
+            const anio = fechaObj.getFullYear();
+            return `${diaSemana} ${dia}/${mes}/${anio}`;
+        }
+        const fechaInstalacionFormateada = formatFecha(fechaInstalacion);
+
+        const mensaje = `
+INFORME DE INSTALACIÓN
+FECHA DE INSTALACIÓN: ${fechaInstalacionFormateada}
+HORA: ${hora}
+SERVICIO: ${servicios.join('\n')}
+SECTOR: ${sector}
+CLIENTE: ${nombre}
+NÚMERO DE CONTACTO: ${numero}
+DIRECCIÓN: ${direccion}
+REFERENCIA: ${referencia}
+TIPO DE PISO: ${tipoPiso}
+        `.trim();
+
+        const whatsappNumber = "593987593512";
+        const encodedMessage = encodeURIComponent(mensaje);
+        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    });
 });
 
