@@ -267,10 +267,14 @@ async function generarPDF() {
 // Configurar worker de PDF.js
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// Variable global para almacenar el blob del PDF
+let pdfBlobGlobal = null;
+
 // Función para mostrar la vista previa en el modal
 function mostrarVistaPrevia(pdfUrl, pdfBlob) {
     const modal = document.getElementById('pdfPreviewModal');
     const btnDescargar = document.getElementById('btnDescargarModal');
+    const btnCompartir = document.getElementById('btnCompartirModal');
     const btnCerrar = document.getElementById('btnCerrarModal');
     const canvas = document.getElementById('pdfCanvas');
     const pdfMessage = document.getElementById('pdfMessage');
@@ -280,9 +284,15 @@ function mostrarVistaPrevia(pdfUrl, pdfBlob) {
         return;
     }
     
+    // Almacenar el blob globalmente para compartir
+    pdfBlobGlobal = pdfBlob;
+    
     // Mostrar el modal
     modal.style.display = 'block';
     pdfMessage.textContent = 'Cargando PDF...';
+    
+    // Mostrar botón de compartir siempre (funciona en navegadores que lo soportan)
+    btnCompartir.style.display = 'block';
     
     // Renderizar PDF en canvas
     renderPDFToCanvas(pdfUrl, canvas, pdfMessage);
@@ -290,6 +300,11 @@ function mostrarVistaPrevia(pdfUrl, pdfBlob) {
     // Event listener para descargar
     btnDescargar.onclick = function() {
         descargarPDF(pdfUrl);
+    };
+    
+    // Event listener para compartir
+    btnCompartir.onclick = function() {
+        compartirPDF(pdfBlob);
     };
     
     // Event listener para cerrar
@@ -345,6 +360,35 @@ async function renderPDFToCanvas(pdfUrl, canvas, messageElement) {
     } catch (error) {
         console.error('Error cargando PDF:', error);
         messageElement.textContent = 'Error al cargar el PDF. Por favor, descargalo.';
+    }
+}
+
+// Función para compartir PDF
+async function compartirPDF(pdfBlob) {
+    try {
+        const archivo = new File([pdfBlob], 'cotizacion_evento.pdf', { type: 'application/pdf' });
+        
+        // Verificar si el navegador soporta compartir archivos
+        if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+            await navigator.share({
+                title: 'Cotización de Evento',
+                text: 'Mi cotización de eventos La Cubierta',
+                files: [archivo]
+            });
+        } else if (navigator.share) {
+            // Fallback si no soporta compartir archivos
+            await navigator.share({
+                title: 'Cotización de Evento',
+                text: 'Mi cotización de eventos La Cubierta',
+                url: window.location.href
+            });
+        } else {
+            alert('Tu navegador no soporta compartir. Por favor, descarga el PDF.');
+        }
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.error('Error al compartir:', error);
+        }
     }
 }
 

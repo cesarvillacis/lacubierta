@@ -296,12 +296,15 @@
             <!-- Barra superior con botones -->
             <div style="padding: 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <h2 style="margin: 0; flex: 1; font-size: 18px;">Vista Previa del PDF</h2>
-                <div style="display: flex; gap: 10px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="btnCompartirModal" style="padding: 10px 15px; background: #2196F3; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                        📤 Compartir
+                    </button>
                     <button id="btnDescargarModal" style="padding: 10px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
                         📥 Descargar
                     </button>
-                    <button id="btnCerrarModal" style="padding: 10px 15px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
-                        ❌ Cerrar
+                    <button id="btnCerrarModal" style="padding: 6px 10px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; min-width: 30px;">
+                        ✕
                     </button>
                 </div>
             </div>
