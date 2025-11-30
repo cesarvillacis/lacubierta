@@ -1,303 +1,359 @@
-function agregarImagen(doc, imagePath, x, y, width, height) {
-    fetch(imagePath)
-        .then(response => response.text())
-        .then(base64 => {
-            const imgBase64 = `data:image/png;base64,${base64.trim()}`;
-            doc.addImage(imgBase64, 'PNG', x, y, width, height);
-        })
-        .catch(error => console.error("Error al cargar la imagen:", error));
-}
-
-function importarFuente(doc, nombreFuente, estilo, rutaBase64, callback) {
-    fetch(rutaBase64)
-        .then(response => response.text())
-        .then(base64String => {
-            doc.addFileToVFS(nombreFuente + ".ttf", base64String);
-            doc.addFont(nombreFuente + ".ttf", nombreFuente, estilo);
-            callback(); // Llama a la siguiente acción después de importar la fuente
-        })
-        .catch(error => console.error('Error cargando la fuente:', error));
-}
-
-
-function generarPDF() {
-    //console.log("Generando PDF...");
-
-    // Crear la instancia de jsPDF
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Cuadro de color #ffb831 que ocupa todo el ancho
-   doc.setFillColor(255, 184, 49);
-    doc.rect(0, 0, doc.internal.pageSize.getWidth(), 50, 'F'); // Altura definible aquí
-
-    // Puntitos decorativos
-    doc.setFillColor(0, 0, 0);
-
-    // Lado izquierdo (3x9 puntos)
-    for (let i = 0; i < 12; i++) {
-        for (let j = 0; j < 4; j++) {
-            doc.circle(3 + j * 4, 3 + i * 4, 0.2, 'F');
-        }
-    }
-
-    // Lado derecho (3x9 puntos)
-    const pageWidth = doc.internal.pageSize.getWidth();
-    for (let i = 0; i < 12; i++) {
-        for (let j = 0; j < 4; j++) {
-            doc.circle(pageWidth - 3 - j * 4, 3 + i * 4, 0.2, 'F');
-        }
-    }
-    //decoracion negra superior
-    // Franja negra
-doc.setFillColor(0, 0, 0);  // Negro
-doc.rect(149.9, 0, 60, 10, 'F');  // Franja negra sobre el fondo naranja
-//triangulo negro
-doc.setFillColor(0, 0, 0); // Color negro (RGB)
-doc.triangle(140, 0, 150, 0, 150, 10, 'F'); // Coordenadas (x1, y1, x2, y2, x3, y3), 'F' para rellenar
-// CUADRO INFERIOR
-doc.setFillColor(255, 184, 49);
-doc.rect(0, 247, doc.internal.pageSize.getWidth(), 50, 'F'); // Franja amarilla inferior
-
-// Puntitos decorativos para la franja inferior
-doc.setFillColor(0, 0, 0); // Color negro para los puntos
-
-const franjaInferiorY = 247; // Posición vertical de la franja amarilla inferior
-
-// Lado izquierdo (4x12 puntos)
-for (let i = 0; i < 12; i++) {
-    for (let j = 0; j < 4; j++) {
-        doc.circle(3 + j * 4, franjaInferiorY + 3 + i * 4, 0.2, 'F');
+// Función para agregar imagen (ahora asíncrona)
+async function agregarImagenAsync(doc, imagePath, x, y, width, height) {
+    try {
+        const response = await fetch(imagePath);
+        const base64 = await response.text();
+        const imgBase64 = `data:image/png;base64,${base64.trim()}`;
+        doc.addImage(imgBase64, 'PNG', x, y, width, height);
+    } catch (error) {
+        console.error(`Error al cargar la imagen ${imagePath}:`, error);
     }
 }
 
-// Lado derecho (4x12 puntos)
-for (let i = 0; i < 12; i++) {
-    for (let j = 0; j < 4; j++) {
-        doc.circle(pageWidth - 3 - j * 4, franjaInferiorY + 3 + i * 4, 0.2, 'F');
+// Función para importar fuente (ahora asíncrona)
+async function importarFuenteAsync(doc, nombreFuente, estilo, rutaBase64) {
+    try {
+        const response = await fetch(rutaBase64);
+        const base64String = await response.text();
+        doc.addFileToVFS(nombreFuente + ".ttf", base64String.trim());
+        doc.addFont(nombreFuente + ".ttf", nombreFuente, estilo);
+    } catch (error) {
+        console.error(`Error cargando la fuente ${nombreFuente}:`, error);
+        throw error;
     }
 }
 
-// DECORACIÓN NEGRA INFERIOR IZQUIERDA
-// Franja negra
-doc.setFillColor(0, 0, 0);  // Color negro
-doc.rect(0, 287, 60.1, 10, 'F');  // Franja negra sobre el fondo amarillo inferior
+// Función principal refactorizada
+async function generarPDF() {
+    try {
+        // Crear la instancia de jsPDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-// Triángulo negro
-doc.setFillColor(0, 0, 0); // Color negro (RGB)
-doc.triangle(60, 287, 70, 297, 60, 297, 'F'); // Coordenadas (x1, y1, x2, y2, x3, y3), 'F' para rellenar
+        // ====== CARGAR FUENTES PRIMERO ======
+        await importarFuenteAsync(doc, "LiterRegular", "normal", "./fonts/Liter-Regular.base64");
+        await importarFuenteAsync(doc, "BebasNeue", "normal", "./fonts/BebasNeue-Regular.base64");
 
-//IMAGENES
-agregarImagen(doc, './img/ubi.base64', 20, 252, 5, 5);
+        // ====== DECORACIONES SUPERIORES ======
+        // Cuadro naranja superior
+        doc.setFillColor(255, 184, 49);
+        doc.rect(0, 0, doc.internal.pageSize.getWidth(), 50, 'F');
 
-agregarImagen(doc, './img/whats.base64', 20, 262, 5, 5);
-
-//FUENTE
-// Importar la fuente desde el archivo base64
-importarFuente(doc, "LiterRegular", "normal", "./fonts/Liter-Regular.base64");
-
-// Luego, cuando necesites usarla
-doc.setFont("LiterRegular");
-doc.setFontSize(12);
-doc.text("Calle José de la Cuadra E5-132, Amaguaña.", 26, 256);
-doc.text("0987593512", 26, 266);
-
-   
-
-
-//DECORACION DE DATOS DEL CLIENTE
-//lineas narajnas
-doc.setDrawColor(255, 184, 49); // Establece el color de la línea
-doc.setLineWidth(1);            // Opcional: grosor de la línea (ajustable)
-
-
-// Dibuja una línea horizontal de (x1, y1) a (x2, y2)
-doc.line(45, 63, 200, 63);      // Línea de izquierda (20,30) a derecha (180,30)
-//doc.line(20, 50, 180, 50);      // Segunda línea un poco más abajo
-doc.line(45, 75, 200, 75);  
-
-doc.line(45, 87, 200, 87); 
-//agrega el logo
-agregarImagen(doc, './img/lacubierta.base64', 20, 10, 30, 30);
-
-   //TABLA INFO DE CLIENTE
-   const clienteTabla = document.querySelector('#datosClienteTabla');
-   if (!clienteTabla) {
-       console.error('No se encontró la tabla dentro del div.');
-       return;
-   }
-
-
-                           // Extraer datos de la tabla de cliente
-                           const filasCliente = Array.from(clienteTabla.querySelectorAll('tr'));
-                           const datosCliente = filasCliente.map(fila => {
-                               const celdas = Array.from(fila.querySelectorAll('th, td'));
-                               return celdas.map(celda => celda.innerText);
-                           });
-                   // ** Extraer los datos del cliente **
-       const nombre = document.querySelector('#nombreClienteTd')?.innerText || "";
-       const cedula = document.querySelector('#cedulaClienteTd')?.innerText || "";
-       const direccion = document.querySelector('#direccionClienteTd')?.innerText || "";
-       const telefono = document.querySelector('#numeroClienteTd')?.innerText || "";
-       const correo = document.querySelector('#correoClienteTd')?.innerText || "";
-   
-       // ** Dibujar los datos del cliente en el PDF **
-       /*let yPos = 60;
-       doc.setFont('courier', 'bold');
-       doc.setFontSize(14);
-       doc.text("Datos del Cliente", 10, yPos);
-       yPos += 12;*/
-       let yPos = 60;
-       doc.setFont("LiterRegular");
-       //doc.setFont("Helvetica", "normal");
-       doc.setFontSize(12);
-       doc.text(`${nombre}`, 45, yPos);
-       yPos += 12;
-   
-       /*doc.text(`Cédula: ${cedula}`, 20, yPos);
-       yPos += 6;*/
-   
-       doc.text(`${direccion} `, 45, yPos);
-       yPos += 12;
-   
-       doc.text(`${telefono}`, 45, yPos);
-       yPos += 12;
-   
-   
-       
-
-
-
-  
-
-
-            //TABLA COTIZACIONES
-            // Ahora puedes agregar la tabla (como lo tenías antes)
-            const tabla = document.querySelector('#resultadoCotizacion table');
-            if (!tabla) {
-                console.error('No se encontró la tabla dentro del div.');
-                return;
+        // Puntitos decorativos superiores - izquierda
+        doc.setFillColor(0, 0, 0);
+        for (let i = 0; i < 12; i++) {
+            for (let j = 0; j < 4; j++) {
+                doc.circle(3 + j * 4, 3 + i * 4, 0.2, 'F');
             }
+        }
 
-            const filas = Array.from(tabla.querySelectorAll('tr'));
-            const datos = filas.map(fila => {
-                const celdas = Array.from(fila.querySelectorAll('th, td'));
-                return celdas.map(celda => celda.innerText);
-            });
-
-            // Separar cabecera y cuerpo
-            const cabecera = [datos[0]]; // Primera fila
-            const cuerpo = datos.slice(1); // El resto
-            // ---- Extraer el Total desde la tabla ----
-            let totalTexto = "";
-            const ultimaFila = cuerpo[cuerpo.length - 1]; 
-
-            if (ultimaFila && ultimaFila[0].toLowerCase().includes("total")) {
-                totalTexto = ultimaFila[ultimaFila.length - 1]; // Última celda de la fila total
-                cuerpo.pop(); // Eliminar la fila del total de la tabla
+        // Puntitos decorativos superiores - derecha
+        const pageWidth = doc.internal.pageSize.getWidth();
+        for (let i = 0; i < 12; i++) {
+            for (let j = 0; j < 4; j++) {
+                doc.circle(pageWidth - 3 - j * 4, 3 + i * 4, 0.2, 'F');
             }
+        }
 
-            // ---- Agregar la fila del Total ----
-            cuerpo.push([
-                { content: "Total:", colSpan: cabecera[0].length - 1, styles: { halign: "left", fontStyle: "bold", fillColor: [242, 242, 242] } },
-                { content: totalTexto, styles: { fontStyle: "bold", fillColor:[242, 242, 242] } }
-            ]);
+        // Decoración negra superior
+        doc.setFillColor(0, 0, 0);
+        doc.rect(149.9, 0, 60, 10, 'F');
+        doc.triangle(140, 0, 150, 0, 150, 10, 'F');
 
+        // ====== DECORACIONES INFERIORES ======
+        // Cuadro naranja inferior
+        doc.setFillColor(255, 184, 49);
+        doc.rect(0, 247, doc.internal.pageSize.getWidth(), 50, 'F');
 
+        const franjaInferiorY = 247;
+        doc.setFillColor(0, 0, 0);
 
-            // Personalizar la tabla con bordes y colores
-            doc.autoTable({
-                head: cabecera,
-                body: cuerpo,
-                startY: 104,  // Cambié la posición Y para que la tabla no se superponga con la imagen
-                theme: 'grid', // Usa el tema 'grid' para bordes por defecto
-                headStyles: {
-                    fillColor: [255, 184, 49],  // Color de fondo para la cabecera (amarillo)
-                    textColor: [0, 0, 0],  // Color de texto (negro)
-                    fontSize: 12,
-                    halign: 'center' // Alineación del texto en la cabecera
-                },
-                bodyStyles: {
-                    fillColor: [255, 255, 255],  // Color de fondo de las filas
-                    textColor: [0, 0, 0],  // Color de texto (negro)
-                    fontSize: 10,
-                    halign: 'center', // Alineación de las celdas en el cuerpo
-                    valign: 'middle'  // Alineación vertical
-                },
-                margin: { top: 30, left: 10, right: 10 },
-                tableWidth: 'auto',
-                styles: {
-                    cellPadding: 3, // Espaciado entre celdas
-                    lineWidth: 0.2,  // Grosor de las líneas de la tabla
-                    lineColor: [0, 0, 0] // Color de las líneas
-                }
-            });
+        // Puntitos decorativos inferiores - izquierda
+        for (let i = 0; i < 12; i++) {
+            for (let j = 0; j < 4; j++) {
+                doc.circle(3 + j * 4, franjaInferiorY + 3 + i * 4, 0.2, 'F');
+            }
+        }
 
-           // Cargar la fuente Base64 desde la carpeta "fonts"
-           fetch('./fonts/BebasNeue-Regular.base64')  
-           .then(response => response.text())
-           .then(base64 => {
-               // Cargar la fuente Base64 al PDF
-               doc.addFileToVFS("BebasNeue-Regular.ttf", base64.trim());
-               doc.addFont("BebasNeue-Regular.ttf", "BebasNeue", "normal");
-       
-               // Verificar si la fuente se registró
-               //console.log(doc.getFontList());
-       
-               // Aplicar la fuente
-               doc.setFont("BebasNeue", "normal");
-               doc.setFontSize(40);
-               doc.text("LA CUBIERTA", 51, 23);
-               doc.setFontSize(30);
-               doc.text("Alquiler de carpas, sillas, mesas y más.", 51, 35);
+        // Puntitos decorativos inferiores - derecha
+        for (let i = 0; i < 12; i++) {
+            for (let j = 0; j < 4; j++) {
+                doc.circle(pageWidth - 3 - j * 4, franjaInferiorY + 3 + i * 4, 0.2, 'F');
+            }
+        }
 
-                //TABLA INFO DE CLIENTE
+        // Decoración negra inferior
+        doc.setFillColor(0, 0, 0);
+        doc.rect(0, 287, 60.1, 10, 'F');
+        doc.triangle(60, 287, 70, 297, 60, 297, 'F');
 
-                        // Función para obtener la fecha en formato "Martes 17 de Enero del 2025"
-                        function obtenerFechaFormateada() {
-                            const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-                            return new Date().toLocaleDateString('es-ES', opciones);
-                        }
+        // ====== AGREGAR IMÁGENES ======
+        await agregarImagenAsync(doc, './img/lacubierta.base64', 20, 10, 30, 30);
+        //await agregarImagenAsync(doc, './img/ubi.base64', 20, 252, 5, 5);
+        //await agregarImagenAsync(doc, './img/whats.base64', 20, 262, 5, 5);
 
-    const fecha = obtenerFechaFormateada();
+        // ====== TEXTO DEL ENCABEZADO (con fuente BebasNeue) ======
+        doc.setFont("BebasNeue", "normal");
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(40);
+        doc.text("LA CUBIERTA", 51, 23);
+        doc.setFontSize(30);
+        doc.text("Alquiler de carpas, sillas, mesas y más.", 51, 35);
 
-    // ** Dibujar los datos del cliente en el PDF **
+        // ====== LÍNEAS DECORATIVAS NARANJAS ======
+        doc.setDrawColor(255, 184, 49);
+        doc.setLineWidth(1);
+        doc.line(45, 63, 200, 63);
+        doc.line(45, 75, 200, 75);
+        doc.line(45, 87, 200, 87);
 
-    let yPos = 60;
-    doc.setFont("BebasNeue", "normal");
-    doc.setFontSize(17);
-    doc.text(`Nombre:`, 20, yPos);
-    yPos += 12;
+        // ====== EXTRAER DATOS DEL CLIENTE ======
+        const nombre = document.querySelector('#nombreClienteTd')?.innerText || "";
+        const direccion = document.querySelector('#direccionClienteTd')?.innerText || "";
+        const telefono = document.querySelector('#numeroClienteTd')?.innerText || "";
 
+        // Función para obtener la fecha formateada
+        function obtenerFechaFormateada() {
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            const fecha = new Date().toLocaleDateString('es-ES', opciones);
+            // Capitalizar primera letra
+            return fecha.charAt(0).toUpperCase() + fecha.slice(1);
+        }
 
-    doc.text(`Dirección: `, 20, yPos);
-    yPos += 12;
+        const fecha = obtenerFechaFormateada();
 
-    doc.text(`Teléfono:`, 20, yPos);
-    yPos += 14;
+        // ====== ETIQUETAS (con fuente BebasNeue) ======
+        let yPos = 60;
+        doc.setFont("BebasNeue", "normal");
+        doc.setFontSize(17);
+        doc.text("Nombre:", 20, yPos);
+        yPos += 12;
 
+        doc.text("Dirección:", 20, yPos);
+        yPos += 12;
 
-    doc.text(`Fecha: ${fecha}`, 10, yPos);
-    //cambia color a blanco
-    doc.setTextColor(77, 77, 77);
-    doc.text(`DETALLES CUENTA`, 110, 256);
-    //cambia color a negro
-    doc.setTextColor(0, 0, 0);
-    doc.text(`BANCO PICHINCHA`, 110, 263);
-    doc.text(`CTA.AHORROS: 3346943600`, 110, 270);
-    doc.text(`CI: 1709221160`, 110, 277);
-    doc.text(`PROPIETARIO: CESAR VILLACIS`, 110, 284);
-    doc.text(`CORREO:`, 110, 291);
-    doc.setFont("Times", "bold");
-    doc.setFontSize(13);
-    doc.text(`marthita_carapaz@hotmail.com`, 126, 290);
-   
+        doc.text("Teléfono:", 20, yPos);
+        yPos += 14;
 
-               // Guardar el PDF
-               doc.save('cotizacion_evento.pdf');
-           })
-           .catch(err => console.error("Error al cargar la fuente:", err));
+        doc.text(`Fecha: ${fecha}`, 10, yPos);
 
+        // ====== VALORES DEL CLIENTE (con fuente LiterRegular) ======
+        yPos = 60;
+        doc.setFont("LiterRegular", "normal");
+        doc.setFontSize(12);
+        doc.text(nombre, 45, yPos);
+        yPos += 12;
+
+        doc.text(direccion, 45, yPos);
+        yPos += 12;
+
+        doc.text(telefono, 45, yPos);
+
+        // ====== PIE DE PÁGINA (con fuente LiterRegular) ======
+                // Logo a la izquierda
+        await agregarImagenAsync(doc, './img/lacubierta.base64', 37, 252, 30, 30);
+
+        // Datos al lado del logo
+        const datosX = 70; // Posición X para los datos
+        
+        // Iconos y textos
+        doc.setFont("LiterRegular", "normal");
+        doc.setFontSize(9);
+        
+        let yPosPie = 258;
+        
+        // Ubicación con icono
+        await agregarImagenAsync(doc, './img/ubi.base64', datosX, yPosPie - 1, 4, 4);
+        doc.text("Barrio San Juan, Calle José de la Cuadra E5-132", datosX + 5, yPosPie);
+        yPosPie += 4;
+        
+        doc.text("Amaguaña, Quito, Ecuador", datosX + 5, yPosPie);
+        yPosPie += 5;
+        
+        doc.text("Martha Carapaz", datosX + 5, yPosPie);
+        yPosPie += 5;
+        
+        // WhatsApp con icono alineado al número
+        await agregarImagenAsync(doc, './img/whats.base64', datosX, yPosPie-3 , 4, 4);
+        doc.text("0987593512", datosX + 5, yPosPie);
+        yPosPie += 5;
+        
+        doc.text("marthita_carapaz@hotmail.com", datosX + 5, yPosPie);
+
+        // ====== TABLA DE COTIZACIÓN ======
+        const tabla = document.querySelector('#resultadoCotizacion table');
+        if (!tabla) {
+            console.error('No se encontró la tabla dentro del div.');
+            return;
+        }
+
+        const filas = Array.from(tabla.querySelectorAll('tr'));
+        const datos = filas.map(fila => {
+            const celdas = Array.from(fila.querySelectorAll('th, td'));
+            return celdas.map(celda => celda.innerText);
+        });
+
+        // Separar cabecera y cuerpo
+        const cabecera = [datos[0]];
+        const cuerpo = datos.slice(1);
+
+        // Extraer el Total
+        let totalTexto = "";
+        const ultimaFila = cuerpo[cuerpo.length - 1];
+
+        if (ultimaFila && ultimaFila[0].toLowerCase().includes("total")) {
+            totalTexto = ultimaFila[ultimaFila.length - 1];
+            cuerpo.pop();
+        }
+
+        // Agregar la fila del Total con formato especial
+        cuerpo.push([
+            {
+                content: "Total:",
+                colSpan: cabecera[0].length - 1,
+                styles: { halign: "left", fontStyle: "bold", fillColor: [242, 242, 242] }
+            },
+            {
+                content: totalTexto,
+                styles: { fontStyle: "bold", fillColor: [242, 242, 242] }
+            }
+        ]);
+
+        // Generar tabla
+        doc.autoTable({
+            head: cabecera,
+            body: cuerpo,
+            startY: 104,
+            theme: 'grid',
+            headStyles: {
+                fillColor: [255, 184, 49],
+                textColor: [0, 0, 0],
+                fontSize: 12,
+                halign: 'center'
+            },
+            bodyStyles: {
+                fillColor: [255, 255, 255],
+                textColor: [0, 0, 0],
+                fontSize: 10,
+                halign: 'center',
+                valign: 'middle'
+            },
+            margin: { top: 30, left: 10, right: 10 },
+            tableWidth: 'auto',
+            styles: {
+                cellPadding: 3,
+                lineWidth: 0.2,
+                lineColor: [0, 0, 0]
+            }
+        });
+
+        // ====== GUARDAR PDF COMO BLOB ======
+        const pdfBlob = doc.output('blob');
+        
+        // Crear URL temporal del PDF
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        // Mostrar modal con vista previa
+        mostrarVistaPrevia(pdfUrl, pdfBlob);
+
+        console.log('PDF generado exitosamente');
+
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        alert('Hubo un error al generar el PDF. Por favor, revisa la consola.');
+    }
 }
 
+// Configurar worker de PDF.js
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// Función para mostrar la vista previa en el modal
+function mostrarVistaPrevia(pdfUrl, pdfBlob) {
+    const modal = document.getElementById('pdfPreviewModal');
+    const btnDescargar = document.getElementById('btnDescargarModal');
+    const btnCerrar = document.getElementById('btnCerrarModal');
+    const canvas = document.getElementById('pdfCanvas');
+    const pdfMessage = document.getElementById('pdfMessage');
+    
+    if (!modal || !canvas) {
+        console.error('Modal o canvas no encontrado');
+        return;
+    }
+    
+    // Mostrar el modal
+    modal.style.display = 'block';
+    pdfMessage.textContent = 'Cargando PDF...';
+    
+    // Renderizar PDF en canvas
+    renderPDFToCanvas(pdfUrl, canvas, pdfMessage);
+    
+    // Event listener para descargar
+    btnDescargar.onclick = function() {
+        descargarPDF(pdfUrl);
+    };
+    
+    // Event listener para cerrar
+    btnCerrar.onclick = function() {
+        modal.style.display = 'none';
+        URL.revokeObjectURL(pdfUrl);
+    };
+    
+    // Cerrar modal al hacer clic fuera de él
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+            URL.revokeObjectURL(pdfUrl);
+        }
+    };
+}
+
+// Función para renderizar PDF en canvas
+async function renderPDFToCanvas(pdfUrl, canvas, messageElement) {
+    try {
+        // Cargar el PDF
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+        
+        // Obtener la primera página
+        const page = pdf.getPage(1);
+        page.then(function(page) {
+            // Escala responsiva
+            const scale = window.innerWidth < 768 ? 1.5 : 2;
+            const viewport = page.getViewport({ scale: scale });
+            
+            // Configurar canvas
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            // Contexto del canvas
+            const context = canvas.getContext('2d');
+            
+            // Renderizar página
+            const renderTask = page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+            
+            renderTask.promise.then(function() {
+                messageElement.textContent = 'Página 1 de ' + pdf.numPages;
+                console.log('PDF renderizado exitosamente');
+            }).catch(function(error) {
+                messageElement.textContent = 'Error al renderizar el PDF';
+                console.error('Error renderizando:', error);
+            });
+        });
+        
+    } catch (error) {
+        console.error('Error cargando PDF:', error);
+        messageElement.textContent = 'Error al cargar el PDF. Por favor, descargalo.';
+    }
+}
+
+// Función para descargar el PDF
+function descargarPDF(pdfUrl) {
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = 'cotizacion_evento.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}

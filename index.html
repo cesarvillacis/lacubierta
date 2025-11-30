@@ -6,13 +6,12 @@
     <title>Cotización de Carpas</title>
     <!--Codigo css-->
     <link rel="stylesheet" href="css/styles.css">
-
 </head>
 
 <body>
 
     <h2 class="styled-title">Cotizador de Eventos "La Cubierta"</h2>
-    <!--<div class="logo">
+      <!--<div class="logo">
         <img src="img/logo.png" alt="Descripción del logo" />
     </div>-->
         <!--DATOS DEL CLIENTE-->
@@ -37,7 +36,7 @@
                 </fieldset>
 <hr>
     <!--CARPAS-->
-    <form id="quoteForm">
+    <!--<form id="quoteForm">-->
         <h2 onclick="toggleSection('CarpasSection')">Carpas</h2>
         <fieldset id="CarpasSection" class="fieldset-hidden">
 
@@ -61,7 +60,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--PAREDES-->
-        <form id="quoteForm">
+       <!-- <form id="quoteForm">-->
             <h2 onclick="toggleSection('ParedesSection')">Paredes</h2>
             <fieldset id="ParedesSection" class="fieldset-hidden">
 
@@ -81,7 +80,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--MESAS-->
-        <form id="quoteForm">
+        <!--<form id="quoteForm">-->
             <h2 onclick="toggleSection('MesasSection')">Mesas</h2>
             <fieldset id="MesasSection" class="fieldset-hidden">
 
@@ -104,7 +103,7 @@
         </fieldset>
         <hr> <!-- Línea separadora -->
         <!--MANTELERIA-->
-        <form id="quoteForm">
+        <!--<form id="quoteForm">-->
         <h2 onclick="toggleSection('ManteleriaSection')">Manteleria</h2>
         <fieldset id="ManteleriaSection" class="fieldset-hidden">
 
@@ -128,7 +127,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--SILLAS-->
-        <form id="quoteForm">
+       <!-- <form id="quoteForm">-->
             <h2 onclick="toggleSection('SillasSection')">Sillas</h2>
             <fieldset id="SillasSection" class="fieldset-hidden">
 
@@ -155,7 +154,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--PISTA DE BAILE-->
-        <form id="quoteForm">
+       <!-- <form id="quoteForm">-->
             <h2 onclick="toggleSection('PistadeBaileSection')">Pista de Baile</h2>
             <fieldset id="PistadeBaileSection" class="fieldset-hidden">
 
@@ -170,7 +169,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--SILLAS Y MESAS PARA NIÑOS-->
-        <form id="quoteForm">
+        <!--<form id="quoteForm">-->
             <h2 onclick="toggleSection('SillasyMesasniniosSection')">Sillas y Mesas de Niños</h2>
             <fieldset id="SillasyMesasniniosSection" class="fieldset-hidden">
    
@@ -217,7 +216,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--TRANSPORTE-->
-        <form id="quoteForm">
+        <!--<form id="quoteForm">-->
             <h2 onclick="toggleSection('TransporteSection')">Transporte</h2>
             <fieldset id="TransporteSection" class="fieldset-hidden">
 
@@ -291,16 +290,36 @@
     <div id="resultadoCotizacion"></div>
     <button id="downloadPDF" class="centered-button">Generar PDF</button>
 
-
-
+    <!-- MODAL PARA VISTA PREVIA DEL PDF -->
+    <div id="pdfPreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow: auto;">
+        <div style="position: relative; margin: 20px auto; max-width: 95%; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+            <!-- Barra superior con botones -->
+            <div style="padding: 15px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <h2 style="margin: 0; flex: 1; font-size: 18px;">Vista Previa del PDF</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btnDescargarModal" style="padding: 10px 15px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                        📥 Descargar
+                    </button>
+                    <button id="btnCerrarModal" style="padding: 10px 15px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;">
+                        ❌ Cerrar
+                    </button>
+                </div>
+            </div>
+            <!-- Contenedor del PDF -->
+            <div id="pdfContainer" style="width: 100%; padding: 20px; text-align: center; background: #f5f5f5; max-height: 80vh; overflow-y: auto;">
+                <canvas id="pdfCanvas" style="max-width: 100%; border: 1px solid #ddd; background: white; margin: 0 auto; display: block;"></canvas>
+                <div id="pdfMessage" style="margin-top: 10px; color: #666; font-size: 14px;"></div>
+            </div>
+        </div>
+    </div>
 
 <!--Codigo Java Script-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script src="js/script.js" defer></script>
 <script src="js/pdf.js" defer></script>
-<!--<script src="js/pdf.js"></script>-->
 </body>
 </html>
 

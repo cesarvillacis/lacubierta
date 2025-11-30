@@ -1,4 +1,3 @@
-
 function toggleSection(sectionId) {
     var section = document.getElementById(sectionId);
     if (section.style.display === "none" || section.style.display === "") {
@@ -617,7 +616,10 @@ if (cantidadJarra > 0) {
 document.addEventListener("DOMContentLoaded", function() {
     const botonGenerarPDF = document.getElementById("downloadPDF");
     
-    // Asegúrate de que la función esté correctamente vinculada
-    botonGenerarPDF.addEventListener("click", generarPDF);
+    if (botonGenerarPDF) {
+        botonGenerarPDF.addEventListener("click", function() {
+            generarPDF();
+        });
+    }
 });
 
