@@ -470,3 +470,77 @@ function descargarPDF(pdfUrl) {
 	link.click();
 	document.body.removeChild(link);
 }
+
+// --- NUEVA: compartir la tabla como imagen (usa html2canvas y la misma lógica de nombres) ---
+async function shareTableImage() {
+    try {
+        const tabla = document.querySelector('#resultadoCotizacion table') || document.getElementById('resultadoCotizacion');
+        if (!tabla) {
+            alert('No hay tabla de cotización para compartir. Genera la cotización primero.');
+            return;
+        }
+
+        // Renderizar con html2canvas
+        const canvas = await html2canvas(tabla, { backgroundColor: '#ffffff', scale: 2 });
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    alert('No se pudo generar la imagen de la tabla.');
+                    return reject();
+                }
+
+                const filename = generateFileNameForClient('png');
+                const file = new File([blob], filename, { type: 'image/png' });
+
+                // Usar Web Share API si soporta archivos
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Cotización',
+                            text: 'Imagen de la cotización'
+                        });
+                        resolve();
+                    } catch (err) {
+                        console.error('Error compartiendo:', err);
+                        alert('Error al compartir. Intenta descargar la imagen y compartir manualmente.');
+                        // fallback: descargar
+                        forceDownloadBlob(blob, filename);
+                        resolve();
+                    }
+                } else {
+                    // Fallback: descargar y avisar al usuario (WhatsApp móvil requiere archivo físico)
+                    forceDownloadBlob(blob, filename);
+                    alert('Tu navegador no permite compartir archivos directamente. Se ha descargado la imagen; compártela desde tu app (WhatsApp).');
+                    resolve();
+                }
+            }, 'image/png');
+        });
+    } catch (error) {
+        console.error('shareTableImage error:', error);
+        alert('Ocurrió un error al intentar compartir la tabla.');
+    }
+}
+
+// Helper: fuerza la descarga de un blob con un nombre
+function forceDownloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Registrar listener del botón al cargar DOM
+document.addEventListener('DOMContentLoaded', function() {
+    const shareTableBtn = document.getElementById('shareTableBtn');
+    if (shareTableBtn) {
+        shareTableBtn.addEventListener('click', function() {
+            // Llamar a la función definida arriba
+            shareTableImage();
+        });
+    }
+});
