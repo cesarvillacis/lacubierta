@@ -267,6 +267,44 @@ async function generarPDF() {
 // Configurar worker de PDF.js
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// --- AÑADIDO: función para obtener fecha en formato seguro YYYY_MM_DD ---
+function obtenerFechaFormateada() {
+	// Devuelve YYYY_MM_DD (seguro para nombres de archivo)
+	const now = new Date();
+	const yyyy = now.getFullYear();
+	const mm = String(now.getMonth() + 1).padStart(2, '0');
+	const dd = String(now.getDate()).padStart(2, '0');
+	return `${yyyy}_${mm}_${dd}`;
+}
+
+// --- AÑADIDO: sanitizar nombre para usar en filename ---
+function sanitizeFilename(name) {
+	if (!name) return '';
+	return name
+		.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quitar acentos
+		.replace(/[^a-zA-Z0-9\s]/g, '') // quitar caracteres no alfanuméricos (salva espacios)
+		.trim()
+		.replace(/\s+/g, '_'); // espacios -> guion bajo
+}
+
+// --- AÑADIDO: generar nombre de archivo consistente (ext debe pasar sin punto, ej. "pdf" o "mp4") ---
+function generateFileNameForClient(ext = 'pdf') {
+	const nombreInput = document.getElementById('nombre');
+	const nombreCliente = nombreInput ? nombreInput.value : '';
+	const fecha = obtenerFechaFormateada();
+
+	const sanitized = sanitizeFilename(nombreCliente);
+	let filename = 'Cotizacion';
+	if (sanitized && sanitized.length > 0) {
+		filename += `_${sanitized}_${fecha}`;
+	} else {
+		filename += `_${fecha}`;
+	}
+	// Asegurar extensión
+	if (!filename.toLowerCase().endsWith(`.${ext}`)) filename += `.${ext}`;
+	return filename;
+}
+
 // Variable global para almacenar el blob del PDF
 let pdfBlobGlobal = null;
 
@@ -366,7 +404,8 @@ async function renderPDFToCanvas(pdfUrl, canvas, messageElement) {
 // Función para compartir PDF
 async function compartirPDF(pdfBlob) {
     try {
-        const archivo = new File([pdfBlob], 'cotizacion_evento.pdf', { type: 'application/pdf' });
+        const filename = generateFileNameForClient('pdf');
+        const archivo = new File([pdfBlob], filename, { type: 'application/pdf' });
         
         // Verificar si el navegador soporta compartir archivos
         if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
@@ -392,12 +431,42 @@ async function compartirPDF(pdfBlob) {
     }
 }
 
+// --- AÑADIDO: compartir video usando la misma lógica de nombre ---
+async function compartirVideo(videoBlob, mimeType = 'video/mp4') {
+    try {
+        const filename = generateFileNameForClient('mp4'); // usa la misma lógica, extensión mp4 por defecto
+        const archivo = new File([videoBlob], filename, { type: mimeType });
+        
+        if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+            await navigator.share({
+                title: 'Video de Cotización',
+                text: 'Video relacionado con la cotización',
+                files: [archivo]
+            });
+        } else if (navigator.share) {
+            await navigator.share({
+                title: 'Video de Cotización',
+                text: 'Video relacionado con la cotización',
+                url: window.location.href
+            });
+        } else {
+            alert('Tu navegador no soporta compartir archivos. Por favor, descarga el video.');
+        }
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.error('Error al compartir el video:', error);
+        }
+    }
+}
+
 // Función para descargar el PDF
 function descargarPDF(pdfUrl) {
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = 'cotizacion_evento.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+	const filename = generateFileNameForClient('pdf');
+
+	const link = document.createElement('a');
+	link.href = pdfUrl;
+	link.download = filename;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 }
