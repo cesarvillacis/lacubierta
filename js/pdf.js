@@ -431,34 +431,6 @@ async function compartirPDF(pdfBlob) {
     }
 }
 
-// --- AÑADIDO: compartir video usando la misma lógica de nombre ---
-async function compartirVideo(videoBlob, mimeType = 'video/mp4') {
-    try {
-        const filename = generateFileNameForClient('mp4'); // usa la misma lógica, extensión mp4 por defecto
-        const archivo = new File([videoBlob], filename, { type: mimeType });
-        
-        if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
-            await navigator.share({
-                title: 'Video de Cotización',
-                text: 'Video relacionado con la cotización',
-                files: [archivo]
-            });
-        } else if (navigator.share) {
-            await navigator.share({
-                title: 'Video de Cotización',
-                text: 'Video relacionado con la cotización',
-                url: window.location.href
-            });
-        } else {
-            alert('Tu navegador no soporta compartir archivos. Por favor, descarga el video.');
-        }
-    } catch (error) {
-        if (error.name !== 'AbortError') {
-            console.error('Error al compartir el video:', error);
-        }
-    }
-}
-
 // Función para descargar el PDF
 function descargarPDF(pdfUrl) {
 	const filename = generateFileNameForClient('pdf');
