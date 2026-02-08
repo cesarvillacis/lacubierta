@@ -466,11 +466,16 @@ async function shareTableImage() {
 
                 // Usar Web Share API si soporta archivos
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
+                    const ahora = new Date();
+                    const fecha = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+                    const hora = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
+                    const identificador = `Cotización ${fecha} ${hora}`;
                     try {
                         await navigator.share({
                             files: [file],
-                            title: 'Cotización',
-                            text: 'Imagen de la cotización'
+                            title: identificador,
+                            text: identificador
                         });
                         resolve();
                     } catch (err) {
