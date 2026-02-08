@@ -468,15 +468,22 @@ async function shareTableImage() {
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
 
                     const ahora = new Date();
-                    const fecha = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-                    const hora = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }).replace(':', '.');
-                    const identificador = `Cotización ${fecha} ${hora}`;
+                    const dia = String(ahora.getDate()).padStart(2, '0');
+                    const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+                    const anio = ahora.getFullYear();
+                    const hora = String(ahora.getHours()).padStart(2, '0');
+                    const minutos = String(ahora.getMinutes()).padStart(2, '0');
+
+                    const identificador = `Cotización - ${dia}/${mes}/${anio} - ${hora}:${minutos}`;
+
+                    alert("FORMATO GENERADO:", identificador);
                     try {
                         await navigator.share({
                             files: [file],
                             title: identificador,
                             text: identificador
                         });
+                        //console.log(identificador);
                         resolve();
                     } catch (err) {
                         console.error('Error compartiendo:', err);
