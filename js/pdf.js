@@ -476,7 +476,7 @@ async function shareTableImage() {
 
                     const identificador = `Cotización - ${dia}/${mes}/${anio} - ${hora}:${minutos}`;
 
-                    alert("FORMATO GENERADO:", identificador);
+                    //alert("FORMATO GENERADO:", identificador);
                     try {
                         await navigator.share({
                             files: [file],
