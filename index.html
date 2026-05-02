@@ -15,7 +15,7 @@
         <img src="img/logo.png" alt="Descripción del logo" />
     </div>-->
         <!--DATOS DEL CLIENTE-->
-        <form id="quoteForm">
+        <form id="quoteForm" autocomplete="off">
                 <h2 onclick="toggleSection('DatosClienteSection')">Datos de Cliente</h2>
                 <fieldset id="DatosClienteSection" class="fieldset-hidden">
 
@@ -213,6 +213,49 @@
         </fieldset>
 
    
+
+        <hr> <!-- Línea separadora -->
+        <!--COMBOS-->
+        <h2 onclick="toggleSection('CombosSection')">Combos</h2>
+        <fieldset id="CombosSection" class="fieldset-hidden">
+
+            <label for="combo3x4">Cantidad de Carpa 3x4m (3 paredes) ($40):</label>
+            <input type="number" id="combo3x4" name="combo3x4"  >
+            <br>
+
+            <label for="combo4x6">Cantidad de Carpa 4x6m (3 paredes) ($51):</label>
+            <input type="number" id="combo4x6" name="combo4x6" >
+            <br>
+
+            <label for="combo6x6">Cantidad de Carpa 6x6m (3 paredes) ($58):</label>
+            <input type="number" id="combo6x6" name="combo6x6" >
+            <br>
+
+            <label for="combo6x8">Cantidad de Carpa 6x8m (3 paredes) ($72):</label>
+            <input type="number" id="combo6x8" name="combo6x8" >
+            <br>
+
+            <label for="comboPista6x4">Cantidad de Pista de Baile 6x4m ($105):</label>
+            <input type="number" id="comboPista6x4" name="comboPista6x4" >
+            <br>
+
+            <label for="comboMesaVestidaSinVestir">Cantidad de Mesa vestida 8 personas c/sillas sin vestir ($11.2):</label>
+            <input type="number" id="comboMesaVestidaSinVestir" name="comboMesaVestidaSinVestir" >
+            <br>
+
+            <label for="comboMesaVestidaSillasVestidas">Cantidad de Mesa vestida 8 personas sillas vestidas ($18.8):</label>
+            <input type="number" id="comboMesaVestidaSillasVestidas" name="comboMesaVestidaSillasVestidas" >
+            <br>
+
+            <label for="comboMesaVestidaSinVestirSC">Cantidad de Mesa vestida 8 personas c/sillas sin vestir (sc) ($9.9):</label>
+            <input type="number" id="comboMesaVestidaSinVestirSC" name="comboMesaVestidaSinVestirSC" >
+            <br>
+
+            <label for="comboMesaVestidaSillasVestidasSC">Cantidad de Mesa vestida 8 personas sillas vestidas (sc) ($15.5):</label>
+            <input type="number" id="comboMesaVestidaSillasVestidasSC" name="comboMesaVestidaSillasVestidasSC" >
+            <br>
+
+        </fieldset>
 
         <hr> <!-- Línea separadora -->
         <!--TRANSPORTE-->

@@ -1,3 +1,20 @@
+
+function obtenerNumero(id) {
+    const input = document.getElementById(id);
+
+    if (!input) {
+        console.warn(`No existe el input con id: ${id}`);
+        return 0;
+    }
+
+    const valor = input.value.trim();
+
+    if (valor === "") {
+        return 0;
+    }
+
+    return Number(valor);
+}
 function toggleSection(sectionId) {
     var section = document.getElementById(sectionId);
     if (section.style.display === "none" || section.style.display === "") {
@@ -71,13 +88,23 @@ let n = 0;
     const precioSillaVestidaNoClientes = 1.2;
     //precio pista de baile
     const precioPistaTablero = 7;
-    //precio sillas y mesas para niños 
+    //precio sillas y mesas para niños
     const precioSillaNino = 0.3;
     const precioMesaNino = 2;
     //precio decoraciones
     const precioTriciclo = 3;
     const precioBandeja = 0.5;
     const precioJarra = 0.25;
+    //precio combos
+    const precioCombo3x4 = 40;
+    const precioCombo4x6 = 51;
+    const precioCombo6x6 = 58;
+    const precioCombo6x8 = 72;
+    const precioComboPista6x4 = 105;
+    const precioComboMesaVestidaSinVestir = 11.2;
+    const precioComboMesaVestidaSillasVestidas = 18.8;
+    const precioComboMesaVestidaSinVestirSC = 9.9;
+    const precioComboMesaVestidaSillasVestidasSC = 15.5;
 
     //costo transporte
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
@@ -123,9 +150,32 @@ let n = 0;
     
     //cantidad de tricilos, bandejas y jarras
     const cantidadTriciclo = parseInt(document.getElementById('triciclo').value) || 0;
+    console.log("triciclo", cantidadTriciclo);
     const cantidadBandeja = parseInt(document.getElementById('bandeja').value) || 0;
     const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
     const cantidadDias = parseInt(document.getElementById('dias').value) || 0;
+
+    //cantidad de combos
+   const cantidadCombo3x4 = obtenerNumero('combo3x4');
+
+console.log(
+    "cantidad:",
+    cantidadCarpas3x4
+);
+
+console.log(
+    "input real:",
+    document.getElementById('carpas3x4').value
+);
+//cantidad Combos
+const cantidadCombo4x6 = obtenerNumero('combo4x6');
+const cantidadCombo6x6 = obtenerNumero('combo6x6');
+const cantidadCombo6x8 = obtenerNumero('combo6x8');
+const cantidadComboPista6x4 = obtenerNumero('comboPista6x4');
+const cantidadComboMesaVestidaSinVestir = obtenerNumero('comboMesaVestidaSinVestir');
+const cantidadComboMesaVestidaSillasVestidas = obtenerNumero('comboMesaVestidaSillasVestidas');
+const cantidadComboMesaVestidaSinVestirSC = obtenerNumero('comboMesaVestidaSinVestirSC');
+const cantidadComboMesaVestidaSillasVestidasSC =obtenerNumero('comboMesaVestidaSillasVestidasSC');
 
     //CALCULO DE COSTOS
     //costo total de carpas
@@ -167,6 +217,17 @@ let n = 0;
     //costo dias adicionales
     const costoDias = valorxDia * cantidadDias;
 
+    //costo combos
+    const costoCombo3x4 = precioCombo3x4 * cantidadCombo3x4;
+    const costoCombo4x6 = precioCombo4x6 * cantidadCombo4x6;
+    const costoCombo6x6 = precioCombo6x6 * cantidadCombo6x6;
+    const costoCombo6x8 = precioCombo6x8 * cantidadCombo6x8;
+    const costoComboPista6x4 = precioComboPista6x4 * cantidadComboPista6x4;
+    const costoComboMesaVestidaSinVestir = precioComboMesaVestidaSinVestir * cantidadComboMesaVestidaSinVestir;
+    const costoComboMesaVestidaSillasVestidas = precioComboMesaVestidaSillasVestidas * cantidadComboMesaVestidaSillasVestidas;
+    const costoComboMesaVestidaSinVestirSC = precioComboMesaVestidaSinVestirSC * cantidadComboMesaVestidaSinVestirSC;
+    const costoComboMesaVestidaSillasVestidasSC = precioComboMesaVestidaSillasVestidasSC * cantidadComboMesaVestidaSillasVestidasSC;
+
     document.getElementById('nombreClienteTd').textContent = nombreCliente;
     document.getElementById('cedulaClienteTd').textContent = cedulaCliente;
     document.getElementById('direccionClienteTd').textContent = direccionCliente;
@@ -176,13 +237,18 @@ let n = 0;
 
     
     //costo total de todo
-    const costoTotal = costoCarpas3x4 + costoCarpas4x6 + costoCarpas6x6 + costoCarpas6x8 +
-                       costoParedes4 + costoParedes6 + costoMesas + costoMesasVestidas +
-                       costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
-                       costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes+
-                       costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles+
-                       costoSillaVestidaNoClientes + costoTriciclo + costoBandeja+ costoJarra + costoDias + costoMesas_4_5_dolar +
-                       costoMesasVestidas_8_dolar;
+const costoTotal = costoCarpas3x4 + costoCarpas4x6 + costoCarpas6x6 + costoCarpas6x8 +
+                   costoParedes4 + costoParedes6 + costoMesas + costoMesasVestidas +
+                   costoSillasSinVestir + costoSillasVestidas + costoPistaTableros +
+                   costoSillasNinos + costoMesasNinos + costoTransporte + costoMobiliario + costoSillasSinVestirclientes +
+                   costoParedes3 + costoVestiduraSilla + costoLazos + costoManteles + costoCubreManteles +
+                   costoSillaVestidaNoClientes + costoTriciclo + costoBandeja + costoJarra + costoDias +
+                   costoMesas_4_5_dolar + costoMesasVestidas_8_dolar +
+                   costoCombo3x4 + costoCombo4x6 + costoCombo6x6 + costoCombo6x8 +
+                   costoComboPista6x4 + costoComboMesaVestidaSinVestir +
+                   costoComboMesaVestidaSillasVestidas +
+                   costoComboMesaVestidaSinVestirSC +
+                   costoComboMesaVestidaSillasVestidasSC;
                        
 
 
@@ -205,7 +271,7 @@ const detalleCotizacion = [];
 
         detalleCotizacion.push({
             item: item,
-            producto: "Carpas 3x4",
+            producto: "Carpa 3x4m",
             cantidad: cantidadCarpas3x4,
             precioIndividual: precioIndividual,
             precioTotal: precioTotal
@@ -219,7 +285,7 @@ if (cantidadCarpa4x6 > 0) {
     
     detalleCotizacion.push({
         item: item,
-        producto: "Carpas 4x6",
+        producto: "Carpa 4x6m",
         cantidad: cantidadCarpa4x6,
         precioIndividual: precioIndividual4x6,
         precioTotal: precioTotal4x6
@@ -234,7 +300,7 @@ if (cantidadCarpa6x6 > 0) {
 
     detalleCotizacion.push({
         item: item,
-        producto: "Carpas 6x6",
+        producto: "Carpa 6x6m",
         cantidad: cantidadCarpa6x6,
         precioIndividual: precioIndividual6x6,
         precioTotal: precioTotal6x6
@@ -249,7 +315,7 @@ if (cantidadCarpa6x8 > 0) {
 
     detalleCotizacion.push({
         item: item,
-        producto: "Carpas 6x8",
+        producto: "Carpa 6x8m",
         cantidad: cantidadCarpa6x8,
         precioIndividual: precioIndividual6x8,
         precioTotal: precioTotal6x8
@@ -266,7 +332,7 @@ if (cantidadMesas > 0) {
 
     detalleCotizacion.push({
         item: item,
-        producto: "Mesas",
+        producto: "Mesa",
         cantidad: cantidadMesas,
         precioIndividual: precioIndividualMesa,
         precioTotal: precioTotalMesa
@@ -602,6 +668,141 @@ if (cantidadJarra > 0) {
         cantidad: cantidadJarra,
         precioIndividual: precioIndividualJarra,
         precioTotal: precioTotalJarra
+    });
+}
+
+if (cantidadCombo3x4 > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualCombo3x4 = precioCombo3x4;
+    const precioTotalCombo3x4 = precioIndividualCombo3x4 * cantidadCombo3x4;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 3x4m (3 paredes)",
+        cantidad: cantidadCombo3x4,
+        precioIndividual: precioIndividualCombo3x4,
+        precioTotal: precioTotalCombo3x4
+    });
+}
+
+if (cantidadCombo4x6 > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualCombo4x6 = precioCombo4x6;
+    const precioTotalCombo4x6 = precioIndividualCombo4x6 * cantidadCombo4x6;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 4x6m (3 paredes)",
+        cantidad: cantidadCombo4x6,
+        precioIndividual: precioIndividualCombo4x6,
+        precioTotal: precioTotalCombo4x6
+    });
+}
+
+if (cantidadCombo6x6 > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualCombo6x6 = precioCombo6x6;
+    const precioTotalCombo6x6 = precioIndividualCombo6x6 * cantidadCombo6x6;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 6x6m (3 paredes)",
+        cantidad: cantidadCombo6x6,
+        precioIndividual: precioIndividualCombo6x6,
+        precioTotal: precioTotalCombo6x6
+    });
+}
+
+if (cantidadCombo6x8 > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualCombo6x8 = precioCombo6x8;
+    const precioTotalCombo6x8 = precioIndividualCombo6x8 * cantidadCombo6x8;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Carpa 6x8m (3 paredes)",
+        cantidad: cantidadCombo6x8,
+        precioIndividual: precioIndividualCombo6x8,
+        precioTotal: precioTotalCombo6x8
+    });
+}
+
+if (cantidadComboPista6x4 > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualComboPista6x4 = precioComboPista6x4;
+    const precioTotalComboPista6x4 = precioIndividualComboPista6x4 * cantidadComboPista6x4;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Pista de Baile 6x4m",
+        cantidad: cantidadComboPista6x4,
+        precioIndividual: precioIndividualComboPista6x4,
+        precioTotal: precioTotalComboPista6x4
+    });
+}
+
+if (cantidadComboMesaVestidaSinVestir > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualComboMesaVestidaSinVestir = precioComboMesaVestidaSinVestir;
+    const precioTotalComboMesaVestidaSinVestir = precioIndividualComboMesaVestidaSinVestir * cantidadComboMesaVestidaSinVestir;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesa vestida 8 personas c/sillas sin vestir",
+        cantidad: cantidadComboMesaVestidaSinVestir,
+        precioIndividual: precioIndividualComboMesaVestidaSinVestir,
+        precioTotal: precioTotalComboMesaVestidaSinVestir
+    });
+}
+
+if (cantidadComboMesaVestidaSillasVestidas > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualComboMesaVestidaSillasVestidas = precioComboMesaVestidaSillasVestidas;
+    const precioTotalComboMesaVestidaSillasVestidas = precioIndividualComboMesaVestidaSillasVestidas * cantidadComboMesaVestidaSillasVestidas;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesa vestida 8 personas sillas vestidas",
+        cantidad: cantidadComboMesaVestidaSillasVestidas,
+        precioIndividual: precioIndividualComboMesaVestidaSillasVestidas,
+        precioTotal: precioTotalComboMesaVestidaSillasVestidas
+    });
+}
+
+if (cantidadComboMesaVestidaSinVestirSC > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualComboMesaVestidaSinVestirSC = precioComboMesaVestidaSinVestirSC;
+    const precioTotalComboMesaVestidaSinVestirSC = precioIndividualComboMesaVestidaSinVestirSC * cantidadComboMesaVestidaSinVestirSC;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesa vestida 8 personas c/sillas sin vestir (sc)",
+        cantidad: cantidadComboMesaVestidaSinVestirSC,
+        precioIndividual: precioIndividualComboMesaVestidaSinVestirSC,
+        precioTotal: precioTotalComboMesaVestidaSinVestirSC
+    });
+}
+
+if (cantidadComboMesaVestidaSillasVestidasSC > 0) {
+    n += 1;
+    const item = n.toString();
+    const precioIndividualComboMesaVestidaSillasVestidasSC = precioComboMesaVestidaSillasVestidasSC;
+    const precioTotalComboMesaVestidaSillasVestidasSC = precioIndividualComboMesaVestidaSillasVestidasSC * cantidadComboMesaVestidaSillasVestidasSC;
+
+    detalleCotizacion.push({
+        item: item,
+        producto: "Mesa vestida 8 personas sillas vestidas (sc)",
+        cantidad: cantidadComboMesaVestidaSillasVestidasSC,
+        precioIndividual: precioIndividualComboMesaVestidaSillasVestidasSC,
+        precioTotal: precioTotalComboMesaVestidaSillasVestidasSC
     });
 }
 
