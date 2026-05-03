@@ -60,55 +60,52 @@ let n = 0;
 
     //COSTOS
     //precio carpas sin paredes
-    const productoCarpa3x4 = await obtenerProducto('carpa_3x4');
-    console.log(productoCarpa3x4);
-    const precioTecho3x4 =productoCarpa3x4.precio;
-
-    const precioTecho4x6 = 35;
-    const precioTecho6x6 = 40;
-    const precioTecho6x8 = 50;
+    const precioTecho3x4 = await obtenerPrecio('carpa_3x4');
+    const precioTecho4x6 = await obtenerPrecio('carpa_4x6');
+    const precioTecho6x6 = await obtenerPrecio('carpa_6x6');
+    const precioTecho6x8 = await obtenerPrecio('carpa_6x8');
     //precio paredes
-    const precioPared3 = 3;
-    const precioPared4 = 4;
-    const precioPared6 = 6;
+    const precioPared3 = await obtenerPrecio('pared_3m');
+    const precioPared4 = await obtenerPrecio('pared_4m');
+    const precioPared6 = await obtenerPrecio('pared_6m');
     //precio mesas
-    const precioMesa = 4;
-    const precioMesaVestida = 7.5;
-    const precioMesa_4_5_dolar = 4.5;
-    const precioMesaVestida_8_dolar = 8; 
+    const precioMesa = await obtenerPrecio('mesa');
+    const precioMesaVestida = await obtenerPrecio('mesa_vestida');
+    const precioMesa_4_5_dolar = await obtenerPrecio('mesa_4_5');
+    const precioMesaVestida_8_dolar = await obtenerPrecio('mesa_vestida_8');
     //manteleria
-    const precioVestiduraSilla = 0.75;
-    const precioLazos = 0.25;
-    const precioManteles = 3.5;
-    const precioCubreManteles = 1;
+    const precioVestiduraSilla = await obtenerPrecio('vestidura_silla');
+    const precioLazos = await obtenerPrecio('lazo');
+    const precioManteles = await obtenerPrecio('mantel');
+    const precioCubreManteles = await obtenerPrecio('cubre_mantel');
 
     //precio mobiliario
-    const precioMobiliario=25;
+    const precioMobiliario = await obtenerPrecio('mobiliario_arco');
 
     //precio sillas
-    const precioSillaSinVestir = 0.4;
-    const precioSillaSinVestirclientes = 0.3;
-    const precioSillaVestida = 1;
-    const precioSillaVestidaNoClientes = 1.2;
+    const precioSillaSinVestir = await obtenerPrecio('silla_sin_vestir');
+    const precioSillaSinVestirclientes = await obtenerPrecio('silla_sin_vestir_cliente');
+    const precioSillaVestida = await obtenerPrecio('silla_vestida');
+    const precioSillaVestidaNoClientes = await obtenerPrecio('silla_vestida_no_cliente');
     //precio pista de baile
-    const precioPistaTablero = 7;
+    const precioPistaTablero = await obtenerPrecio('pista_tablero');
     //precio sillas y mesas para niños
-    const precioSillaNino = 0.3;
-    const precioMesaNino = 2;
+    const precioSillaNino = await obtenerPrecio('silla_nino');
+    const precioMesaNino = await obtenerPrecio('mesa_nino');
     //precio decoraciones
-    const precioTriciclo = 3;
-    const precioBandeja = 0.5;
-    const precioJarra = 0.25;
+    const precioTriciclo = await obtenerPrecio('triciclo_decoracion');
+    const precioBandeja = await obtenerPrecio('bandeja');
+    const precioJarra = await obtenerPrecio('jarra');
     //precio combos
-    const precioCombo3x4 = 40;
-    const precioCombo4x6 = 51;
-    const precioCombo6x6 = 58;
-    const precioCombo6x8 = 72;
-    const precioComboPista6x4 = 105;
-    const precioComboMesaVestidaSinVestir = 11.2;
-    const precioComboMesaVestidaSillasVestidas = 18.8;
-    const precioComboMesaVestidaSinVestirSC = 9.9;
-    const precioComboMesaVestidaSillasVestidasSC = 15.5;
+    const precioCombo3x4 = await obtenerPrecio('combo_carpa_3x4');
+    const precioCombo4x6 = await obtenerPrecio('combo_carpa_4x6');
+    const precioCombo6x6 = await obtenerPrecio('combo_carpa_6x6');
+    const precioCombo6x8 = await obtenerPrecio('combo_carpa_6x8');
+    const precioComboPista6x4 = await obtenerPrecio('combo_pista_6x4');
+    const precioComboMesaVestidaSinVestir = await obtenerPrecio('combo_mesa_vestida_sillas_sin');
+    const precioComboMesaVestidaSillasVestidas = await obtenerPrecio('combo_mesa_vestida_sillas_vestidas');
+    const precioComboMesaVestidaSinVestirSC = await obtenerPrecio('combo_mesa_vestida_sillas_sin_sc');
+    const precioComboMesaVestidaSillasVestidasSC = await obtenerPrecio('combo_mesa_vestida_sillas_vestidas_sc');
 
     //costo transporte
     const costoTransporte = parseFloat(document.getElementById('costoTransporte').value) || 0;
