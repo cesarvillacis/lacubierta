@@ -1,4 +1,5 @@
 
+
 function obtenerNumero(id) {
     const input = document.getElementById(id);
 
@@ -48,7 +49,7 @@ function mostrarDetalleCotizacion(detalle, costoTotal) {
 
 
 
-function calcularCotizacion() {
+async function calcularCotizacion() {
 let n = 0;
     //datos de cliente
     const nombreCliente = document.getElementById('nombre').value;
@@ -59,7 +60,10 @@ let n = 0;
 
     //COSTOS
     //precio carpas sin paredes
-    const precioTecho3x4 = 30;
+    const productoCarpa3x4 = await obtenerProducto('carpa_3x4');
+    console.log(productoCarpa3x4);
+    const precioTecho3x4 =productoCarpa3x4.precio;
+
     const precioTecho4x6 = 35;
     const precioTecho6x6 = 40;
     const precioTecho6x8 = 50;
@@ -823,4 +827,17 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    async function () {
+
+        await cargarProductos();
+
+        console.log(
+            'Productos listos'
+        );
+    }
+);
 
