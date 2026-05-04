@@ -24,7 +24,7 @@ async function importarFuenteAsync(doc, nombreFuente, estilo, rutaBase64) {
 }
 
 // Función principal refactorizada
-async function generarPDF() {
+export async function generarPDF() {
     try {
         // Crear la instancia de jsPDF
         const { jsPDF } = window.jspdf;

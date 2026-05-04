@@ -114,69 +114,58 @@ let n = 0;
     
     //CANTIDAD DE ARTICULOS
     //cantidad de carpas
-    const cantidadCarpas3x4 = parseInt(document.getElementById('carpas3x4').value) || 0;
-    const cantidadCarpa4x6 = parseInt(document.getElementById('carpas4x6').value) || 0;
-    const cantidadCarpa6x6 = parseInt(document.getElementById('carpas6x6').value) || 0;
-    const cantidadCarpa6x8 = parseInt(document.getElementById('carpas6x8').value) || 0;
+    const cantidadCarpas3x4 = parseInt(document.getElementById('carpa_3x4').value) || 0;
+    const cantidadCarpa4x6 = parseInt(document.getElementById('carpa_4x6').value) || 0;
+    const cantidadCarpa6x6 = parseInt(document.getElementById('carpa_6x6').value) || 0;
+    const cantidadCarpa6x8 = parseInt(document.getElementById('carpa_6x8').value) || 0;
 
     //cantidad de paredes
-    const cantidadParedes3 = parseInt(document.getElementById('paredes3').value) || 0;
-    const cantidadParedes4 = parseInt(document.getElementById('paredes4').value) || 0;
-    const cantidadParedes6 = parseInt(document.getElementById('paredes6').value) || 0;
+    const cantidadParedes3 = parseInt(document.getElementById('pared_3m').value) || 0;
+    const cantidadParedes4 = parseInt(document.getElementById('pared_4m').value) || 0;
+    const cantidadParedes6 = parseInt(document.getElementById('pared_6m').value) || 0;
 
     //cantidad de mesas
-    const cantidadMesas = parseInt(document.getElementById('mesas').value) || 0;
-    const cantidadMesas_4_5_dolar = parseInt(document.getElementById('mesas_4_5_dolar').value) || 0;
-    const cantidadMesasVestidas = parseInt(document.getElementById('mesasVestidas').value) || 0;
-    const cantidadMesasVestidas_8_dolar = parseInt(document.getElementById('mesasVestidas_8_dolar').value) || 0;
+    const cantidadMesas = parseInt(document.getElementById('mesa').value) || 0;
+    const cantidadMesas_4_5_dolar = parseInt(document.getElementById('mesa_4_5').value) || 0;
+    const cantidadMesasVestidas = parseInt(document.getElementById('mesa_vestida').value) || 0;
+    const cantidadMesasVestidas_8_dolar = parseInt(document.getElementById('mesa_vestida_8').value) || 0;
     //cantidad manteleria
-    const cantidadVestiduraSilla = parseInt(document.getElementById('vestidura').value) || 0;
+    const cantidadVestiduraSilla = parseInt(document.getElementById('vestidura_silla').value) || 0;
     const cantidadLazos = parseInt(document.getElementById('lazo').value) || 0;
     const cantidadManteles = parseInt(document.getElementById('mantel').value) || 0;
-    const cantidadCubreManteles = parseInt(document.getElementById('cubreMantel').value) || 0;
+    const cantidadCubreManteles = parseInt(document.getElementById('cubre_mantel').value) || 0;
 
     //cantidad de sillas
-    const cantidadSillasSinVestir = parseInt(document.getElementById('sillasSinVestir').value) || 0;
-    const cantidadSillasVestidas = parseInt(document.getElementById('sillasVestidas').value) || 0;
-    const cantidadSillasSinVestirclientes = parseInt(document.getElementById('sillasSinVestirclientes').value) || 0;
-    const cantidadSillaVestidaNoClientes= parseInt(document.getElementById('sillasVestidasNoClientes').value) || 0;
+    const cantidadSillasSinVestir = parseInt(document.getElementById('silla_sin_vestir').value) || 0;
+    const cantidadSillasVestidas = parseInt(document.getElementById('silla_vestida').value) || 0;
+    const cantidadSillasSinVestirclientes = parseInt(document.getElementById('silla_sin_vestir_cliente').value) || 0;
+    const cantidadSillaVestidaNoClientes= parseInt(document.getElementById('silla_vestida_no_cliente').value) || 0;
 
     //cantida de tableros de pista de baile
-    const cantidadPistaTableros = parseInt(document.getElementById('pistaTableros').value) || 0;
+    const cantidadPistaTableros = parseInt(document.getElementById('pista_tablero').value) || 0;
 
     //cantidad de silla y mesas para ninios
-    const cantidadSillasNinos = parseInt(document.getElementById('sillasNinos').value) || 0;
-    const cantidadMesasNinos = parseInt(document.getElementById('mesasNinos').value) || 0;
-    const cantidadMobiliario = parseInt(document.getElementById('mobiliario').value) || 0;
+    const cantidadSillasNinos = parseInt(document.getElementById('silla_nino').value) || 0;
+    const cantidadMesasNinos = parseInt(document.getElementById('mesa_nino').value) || 0;
+    const cantidadMobiliario = parseInt(document.getElementById('mobiliario_arco').value) || 0;
     
     //cantidad de tricilos, bandejas y jarras
-    const cantidadTriciclo = parseInt(document.getElementById('triciclo').value) || 0;
+    const cantidadTriciclo = parseInt(document.getElementById('triciclo_decoracion').value) || 0;
     console.log("triciclo", cantidadTriciclo);
     const cantidadBandeja = parseInt(document.getElementById('bandeja').value) || 0;
     const cantidadJarra = parseInt(document.getElementById('jarra').value) || 0;
     const cantidadDias = parseInt(document.getElementById('dias').value) || 0;
 
     //cantidad de combos
-   const cantidadCombo3x4 = obtenerNumero('combo3x4');
-
-console.log(
-    "cantidad:",
-    cantidadCarpas3x4
-);
-
-console.log(
-    "input real:",
-    document.getElementById('carpas3x4').value
-);
-//cantidad Combos
-const cantidadCombo4x6 = obtenerNumero('combo4x6');
-const cantidadCombo6x6 = obtenerNumero('combo6x6');
-const cantidadCombo6x8 = obtenerNumero('combo6x8');
-const cantidadComboPista6x4 = obtenerNumero('comboPista6x4');
-const cantidadComboMesaVestidaSinVestir = obtenerNumero('comboMesaVestidaSinVestir');
-const cantidadComboMesaVestidaSillasVestidas = obtenerNumero('comboMesaVestidaSillasVestidas');
-const cantidadComboMesaVestidaSinVestirSC = obtenerNumero('comboMesaVestidaSinVestirSC');
-const cantidadComboMesaVestidaSillasVestidasSC =obtenerNumero('comboMesaVestidaSillasVestidasSC');
+    const cantidadCombo3x4 = obtenerNumero('combo_carpa_3x4');
+    const cantidadCombo4x6 = obtenerNumero('combo_carpa_4x6');
+    const cantidadCombo6x6 = obtenerNumero('combo_carpa_6x6');
+    const cantidadCombo6x8 = obtenerNumero('combo_carpa_6x8');
+    const cantidadComboPista6x4 = obtenerNumero('combo_pista_6x4');
+    const cantidadComboMesaVestidaSinVestir = obtenerNumero('combo_mesa_vestida_sillas_sin');
+    const cantidadComboMesaVestidaSillasVestidas = obtenerNumero('combo_mesa_vestida_sillas_vestidas');
+    const cantidadComboMesaVestidaSinVestirSC = obtenerNumero('combo_mesa_vestida_sillas_sin_sc');
+    const cantidadComboMesaVestidaSillasVestidasSC = obtenerNumero('combo_mesa_vestida_sillas_vestidas_sc');
 
     //CALCULO DE COSTOS
     //costo total de carpas

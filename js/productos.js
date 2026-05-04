@@ -9,7 +9,7 @@ let productos = [];
 // CARGAR TODOS LOS PRODUCTOS
 // ========================================
 
-async function cargarProductos() {
+export async function cargarProductos() {
 
     const { data, error } =
         await window.supabaseClient
@@ -32,6 +32,7 @@ async function cargarProductos() {
         'Productos cargados:',
         productos
     );
+    return productos;
 }
 
 
@@ -39,7 +40,7 @@ async function cargarProductos() {
 // OBTENER PRODUCTO POR CODIGO
 // ========================================
 
-function obtenerProducto(codigo) {
+export function obtenerProducto(codigo) {
 
     return productos.find(
         producto =>
@@ -52,7 +53,7 @@ function obtenerProducto(codigo) {
 // OBTENER SOLO EL PRECIO
 // ========================================
 
-function obtenerPrecio(codigo) {
+export function obtenerPrecio(codigo) {
 
     const producto =
         obtenerProducto(codigo);
