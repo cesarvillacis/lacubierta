@@ -1,6 +1,7 @@
 
 let cotizacionActual = [];
 let borradorCotizacion = [];
+let borradorInicial = '';
 let siguienteIdCotizacion = 1;
 
 function obtenerNumero(id) {
@@ -91,12 +92,14 @@ function prepararDetalleCotizacion(detalle) {
         precioIndividual: Number(item.precioIndividual),
         cantidad: Number(item.cantidad),
         precioTotal: Number(item.cantidad) * Number(item.precioIndividual),
-        personalizado: Boolean(item.personalizado)
+        personalizado: Boolean(item.personalizado),
+        eliminado: false
     }));
 }
 
 function calcularTotalCotizacion(detalle) {
-    return detalle.reduce((total, item) => total + item.cantidad * item.precioIndividual, 0);
+    return detalle.reduce((total, item) =>
+        item.eliminado ? total : total + item.cantidad * item.precioIndividual, 0);
 }
 
 function mostrarDetalleCotizacion(detalle) {
@@ -105,7 +108,9 @@ function mostrarDetalleCotizacion(detalle) {
 
     detalle.forEach((item, indice) => {
         // Agrega el símbolo "$" a los valores de Precio Individual y Precio Total
-        const precioIndividual = `$${item.precioIndividual.toFixed(2)}`;
+        const precioIndividual = item.precioIndividual === 0
+            ? 'Cortesía'
+            : `$${item.precioIndividual.toFixed(2)}`;
         const precioTotal = `$${item.precioTotal.toFixed(2)}`;
 
         tableHtml += `<tr><td>${indice + 1}</td><td>${escaparHtml(item.producto)}</td><td>${item.cantidad}</td><td>${precioIndividual}</td><td>${precioTotal}</td></tr>`;
@@ -150,16 +155,22 @@ function abrirEditorCotizacion() {
     }
 
     borradorCotizacion = cotizacionActual.map(item => ({ ...item }));
+    borradorInicial = JSON.stringify(borradorCotizacion);
     document.getElementById('errorEditorCotizacion').textContent = '';
     renderizarEditorCotizacion();
+    renderizarCatalogoDisponible();
     document.getElementById('editorCotizacionModal').hidden = false;
     document.body.classList.add('modal-abierto');
 }
 
-function cerrarEditorCotizacion() {
+function cerrarEditorCotizacion(forzar = false) {
+    const hayCambios = JSON.stringify(borradorCotizacion) !== borradorInicial;
+    if (!forzar && hayCambios && !confirm('Tienes cambios sin guardar. ¿Deseas descartarlos?')) return;
+
     document.getElementById('editorCotizacionModal').hidden = true;
     document.body.classList.remove('modal-abierto');
     borradorCotizacion = [];
+    borradorInicial = '';
 }
 
 function actualizarResumenEditor() {
@@ -182,6 +193,21 @@ function renderizarEditorCotizacion() {
             : `Precio base: $${Number(item.precioBase).toFixed(2)}`;
         const subtotal = item.cantidad * item.precioIndividual;
 
+        if (item.eliminado) {
+            return `
+                <article class="fila-editor fila-editor--eliminada" data-id="${item.idCotizacion}">
+                    <div class="fila-editor__cabecera">
+                        <strong>${escaparHtml(item.producto)}</strong>
+                        <button type="button" class="boton-restaurar" data-accion="restaurar">Restaurar</button>
+                    </div>
+                    <span class="estado-eliminacion">Se eliminará al guardar los cambios</span>
+                </article>`;
+        }
+
+        const botonPrecioBase = item.precioBase != null
+            ? `<button type="button" class="restaurar-precio" data-accion="restaurar-precio" ${item.precioIndividual === item.precioBase ? 'hidden' : ''}>Restaurar precio base ($${Number(item.precioBase).toFixed(2)})</button>`
+            : '';
+
         return `
             <article class="fila-editor" data-id="${item.idCotizacion}">
                 <div class="fila-editor__cabecera">
@@ -189,6 +215,7 @@ function renderizarEditorCotizacion() {
                     <button type="button" class="boton-eliminar" data-accion="eliminar">Eliminar</button>
                 </div>
                 <span class="precio-base">${precioBase}</span>
+                ${botonPrecioBase}
                 <div class="fila-editor__campos">
                     <label>Cantidad
                         <input type="number" min="0.01" step="0.01" value="${item.cantidad}" data-campo="cantidad">
@@ -216,16 +243,28 @@ function actualizarBorradorDesdeInput(evento) {
     item[input.dataset.campo] = Number(input.value);
     const subtotal = fila.querySelector('[data-campo="subtotal"]');
     subtotal.value = `$${((item.cantidad || 0) * (item.precioIndividual || 0)).toFixed(2)}`;
+    const restaurarPrecio = fila.querySelector('[data-accion="restaurar-precio"]');
+    if (restaurarPrecio) restaurarPrecio.hidden = item.precioIndividual === item.precioBase;
     actualizarResumenEditor();
 }
 
 function eliminarItemDelBorrador(evento) {
-    const boton = evento.target.closest('[data-accion="eliminar"]');
+    const boton = evento.target.closest('[data-accion]');
     const fila = evento.target.closest('[data-id]');
     if (!boton || !fila) return;
 
-    borradorCotizacion = borradorCotizacion.filter(item => item.idCotizacion !== fila.dataset.id);
+    const item = borradorCotizacion.find(elemento => elemento.idCotizacion === fila.dataset.id);
+    if (!item) return;
+
+    if (boton.dataset.accion === 'eliminar') item.eliminado = true;
+    if (boton.dataset.accion === 'restaurar') item.eliminado = false;
+    if (boton.dataset.accion === 'restaurar-precio' && item.precioBase != null) {
+        item.precioIndividual = item.precioBase;
+        item.precioTotal = item.cantidad * item.precioIndividual;
+    }
+
     renderizarEditorCotizacion();
+    renderizarCatalogoDisponible();
 }
 
 function agregarProductoPersonalizado() {
@@ -239,6 +278,14 @@ function agregarProductoPersonalizado() {
 
     if (!nombre || !Number.isFinite(cantidad) || cantidad <= 0 || !Number.isFinite(precio) || precio < 0) {
         error.textContent = 'Escribe un nombre, una cantidad mayor que cero y un precio válido.';
+        return;
+    }
+
+    const nombreRepetido = borradorCotizacion.some(item =>
+        !item.eliminado && item.producto.trim().toLocaleLowerCase() === nombre.toLocaleLowerCase()
+    );
+    if (nombreRepetido) {
+        error.textContent = 'Ya existe un producto con ese nombre. Edita su cantidad en la lista.';
         return;
     }
 
@@ -259,8 +306,85 @@ function agregarProductoPersonalizado() {
     renderizarEditorCotizacion();
 }
 
+function obtenerCatalogoFormulario() {
+    const excluidos = new Set(['costoTransporte', 'dias', 'valorxDia']);
+    const catalogo = [];
+
+    document.querySelectorAll('#quoteForm fieldset').forEach(fieldset => {
+        const etiquetas = Array.from(fieldset.querySelectorAll('label'));
+        const inputs = Array.from(fieldset.querySelectorAll('input[type="number"]'));
+        const categoria = document.querySelector(`[data-section="${fieldset.id}"] span`)?.textContent || 'Productos';
+
+        inputs.forEach((input, indice) => {
+            if (excluidos.has(input.id)) return;
+            const texto = etiquetas[indice]?.textContent.trim() || input.name;
+            const precioEncontrado = texto.match(/\(\$?([0-9]+(?:\.[0-9]+)?)\s*\$?/);
+            if (!precioEncontrado) return;
+            const nombreNormalizado = texto
+                .replace(/^Cantidad de\s+/i, '')
+                .replace(/\s*\([^)]*\):?\s*$/, '')
+                .replace(/:\s*$/, '')
+                .trim();
+            const nombre = nombreNormalizado.charAt(0).toLocaleUpperCase() + nombreNormalizado.slice(1);
+
+            catalogo.push({ codigo: input.id, categoria, nombre, precio: Number(precioEncontrado[1]) });
+        });
+    });
+
+    return catalogo;
+}
+
+function renderizarCatalogoDisponible() {
+    const select = document.getElementById('productoCatalogoSelect');
+    const catalogo = obtenerCatalogoFormulario().filter(producto => {
+        const yaSeleccionadoEnFormulario = Number(document.getElementById(producto.codigo)?.value || 0) > 0;
+        const yaAgregado = borradorCotizacion.some(item => !item.eliminado && item.codigoCatalogo === producto.codigo);
+        return !yaSeleccionadoEnFormulario && !yaAgregado;
+    });
+
+    if (catalogo.length === 0) {
+        select.innerHTML = '<option value="">No hay más productos disponibles</option>';
+        select.disabled = true;
+        return;
+    }
+
+    select.disabled = false;
+    select.innerHTML = '<option value="">Selecciona un producto</option>' + catalogo.map(producto =>
+        `<option value="${producto.codigo}">${escaparHtml(producto.categoria)} · ${escaparHtml(producto.nombre)} — $${producto.precio.toFixed(2)}</option>`
+    ).join('');
+}
+
+function agregarProductoCatalogo() {
+    const select = document.getElementById('productoCatalogoSelect');
+    const cantidad = Number(document.getElementById('productoCatalogoCantidad').value);
+    const producto = obtenerCatalogoFormulario().find(item => item.codigo === select.value);
+    const error = document.getElementById('errorEditorCotizacion');
+
+    if (!producto || !Number.isFinite(cantidad) || cantidad <= 0) {
+        error.textContent = 'Selecciona un producto y escribe una cantidad mayor que cero.';
+        return;
+    }
+
+    borradorCotizacion.push({
+        idCotizacion: `catalogo-${siguienteIdCotizacion++}`,
+        codigoCatalogo: producto.codigo,
+        producto: producto.nombre,
+        cantidad,
+        precioBase: producto.precio,
+        precioIndividual: producto.precio,
+        precioTotal: cantidad * producto.precio,
+        personalizado: false,
+        eliminado: false
+    });
+    document.getElementById('productoCatalogoCantidad').value = '1';
+    error.textContent = '';
+    renderizarEditorCotizacion();
+    renderizarCatalogoDisponible();
+}
+
 function guardarCambiosCotizacion() {
-    const datosInvalidos = borradorCotizacion.some(item =>
+    const itemsActivos = borradorCotizacion.filter(item => !item.eliminado);
+    const datosInvalidos = itemsActivos.some(item =>
         !Number.isFinite(item.cantidad) || item.cantidad <= 0 ||
         !Number.isFinite(item.precioIndividual) || item.precioIndividual < 0
     );
@@ -271,13 +395,19 @@ function guardarCambiosCotizacion() {
         return;
     }
 
-    cotizacionActual = borradorCotizacion.map(item => ({
+    if (itemsActivos.length === 0) {
+        document.getElementById('errorEditorCotizacion').textContent =
+            'La cotización debe conservar al menos un producto.';
+        return;
+    }
+
+    cotizacionActual = itemsActivos.map(item => ({
         ...item,
         precioTotal: item.cantidad * item.precioIndividual,
         modificado: item.precioBase != null && item.precioIndividual !== item.precioBase
     }));
     mostrarDetalleCotizacion(cotizacionActual);
-    cerrarEditorCotizacion();
+    cerrarEditorCotizacion(true);
 }
 
 
@@ -1069,10 +1199,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById('administrarCotizacion').addEventListener('click', abrirEditorCotizacion);
     document.getElementById('nuevaCotizacion').addEventListener('click', iniciarNuevaCotizacion);
-    document.getElementById('cerrarEditorCotizacion').addEventListener('click', cerrarEditorCotizacion);
-    document.getElementById('cancelarEditorCotizacion').addEventListener('click', cerrarEditorCotizacion);
+    document.getElementById('cerrarEditorCotizacion').addEventListener('click', () => cerrarEditorCotizacion());
+    document.getElementById('cancelarEditorCotizacion').addEventListener('click', () => cerrarEditorCotizacion());
     document.getElementById('guardarEditorCotizacion').addEventListener('click', guardarCambiosCotizacion);
     document.getElementById('agregarProductoPersonalizado').addEventListener('click', agregarProductoPersonalizado);
+    document.getElementById('agregarProductoCatalogo').addEventListener('click', agregarProductoCatalogo);
     document.getElementById('listaEditorCotizacion').addEventListener('input', actualizarBorradorDesdeInput);
     document.getElementById('listaEditorCotizacion').addEventListener('click', eliminarItemDelBorrador);
     document.getElementById('editorCotizacionModal').addEventListener('click', function(evento) {

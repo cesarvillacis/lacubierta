@@ -281,6 +281,37 @@ body.modal-abierto {
     background: #fafafa;
 }
 
+.fila-editor--eliminada {
+    border-color: #d6a5a5;
+    background: #fff5f5;
+    opacity: 0.85;
+}
+
+.fila-editor--eliminada .fila-editor__campos {
+    display: none;
+}
+
+.estado-eliminacion {
+    display: block;
+    margin-top: 8px;
+    color: #8b1d1d;
+    font-weight: 700;
+}
+
+.boton-restaurar {
+    background: #e9e9e9;
+    color: #222;
+}
+
+.restaurar-precio {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: transparent;
+    color: #725500;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
 .fila-editor__campos,
 .producto-personalizado__campos {
     display: grid;
@@ -305,7 +336,8 @@ body.modal-abierto {
     font-size: 13px;
 }
 
-.producto-personalizado {
+.producto-personalizado,
+.producto-catalogo {
     margin-top: 24px;
     border: 1px solid #d8d2bd;
     border-radius: 10px;
@@ -313,7 +345,8 @@ body.modal-abierto {
     overflow: hidden;
 }
 
-.producto-personalizado summary {
+.producto-personalizado summary,
+.producto-catalogo summary {
     min-height: 52px;
     padding: 15px 18px;
     cursor: pointer;
@@ -322,17 +355,43 @@ body.modal-abierto {
     box-sizing: border-box;
 }
 
-.producto-personalizado[open] summary {
+.producto-personalizado[open] summary,
+.producto-catalogo[open] summary {
     border-bottom: 1px solid #e4dec9;
     background: #fff8df;
 }
 
-.producto-personalizado summary::marker {
+.producto-personalizado summary::marker,
+.producto-catalogo summary::marker {
     color: #9a7200;
 }
 
 .producto-personalizado__contenido {
     padding: 18px;
+}
+
+.producto-catalogo__contenido {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 14px;
+    padding: 18px;
+}
+
+.producto-catalogo__contenido p,
+.producto-catalogo__contenido .boton-agregar-producto {
+    grid-column: 1 / -1;
+}
+
+.producto-catalogo select,
+.producto-catalogo input {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid #040404;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #fff;
 }
 
 .producto-personalizado__ayuda {
@@ -638,6 +697,15 @@ tr:nth-child(even) {
     .fila-editor__campos,
     .producto-personalizado__campos {
         grid-template-columns: 1fr;
+    }
+
+    .producto-catalogo__contenido {
+        grid-template-columns: 1fr;
+    }
+
+    .producto-catalogo__contenido p,
+    .producto-catalogo__contenido .boton-agregar-producto {
+        grid-column: 1;
     }
 
     .modal-editor {

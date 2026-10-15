@@ -360,6 +360,20 @@
               <p class="modal-editor__ayuda">Los cambios de precio se aplican únicamente a esta cotización.</p>
               <div id="listaEditorCotizacion" class="lista-editor"></div>
 
+            <details class="producto-catalogo">
+              <summary>Añadir producto existente</summary>
+              <div class="producto-catalogo__contenido">
+                <p class="producto-personalizado__ayuda">Selecciona un artículo del formulario que todavía no esté incluido.</p>
+                <label>Producto del catálogo
+                  <select id="productoCatalogoSelect"></select>
+                </label>
+                <label>Cantidad
+                  <input id="productoCatalogoCantidad" type="number" min="1" step="1" inputmode="numeric" value="1">
+                </label>
+                <button id="agregarProductoCatalogo" type="button" class="boton-agregar-producto"><span aria-hidden="true">＋</span> Añadir producto existente</button>
+              </div>
+            </details>
+
             <details class="producto-personalizado">
               <summary id="tituloProductoPersonalizado">Añadir producto personalizado</summary>
               <div class="producto-personalizado__contenido">
