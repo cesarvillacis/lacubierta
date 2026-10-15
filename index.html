@@ -16,7 +16,7 @@
     </div>-->
         <!--DATOS DEL CLIENTE-->
         <form id="quoteForm" autocomplete="off">
-                <h2 onclick="toggleSection('DatosClienteSection')">Datos de Cliente</h2>
+                <button type="button" class="section-toggle" data-section="DatosClienteSection" aria-expanded="false"><span>Datos de Cliente</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
                 <fieldset id="DatosClienteSection" class="fieldset-hidden">
 
                 <label for="nombre">Nombre:</label>
@@ -37,7 +37,7 @@
 <hr>
     <!--CARPAS-->
     <!--<form id="quoteForm">-->
-        <h2 onclick="toggleSection('CarpasSection')">Carpas</h2>
+        <button type="button" class="section-toggle" data-section="CarpasSection" aria-expanded="false"><span>Carpas</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
         <fieldset id="CarpasSection" class="fieldset-hidden">
 
         <label for="carpas3x4">Cantidad de carpas 3x4(30$):</label>
@@ -61,7 +61,7 @@
         <hr> <!-- Línea separadora -->
         <!--PAREDES-->
        <!-- <form id="quoteForm">-->
-            <h2 onclick="toggleSection('ParedesSection')">Paredes</h2>
+            <button type="button" class="section-toggle" data-section="ParedesSection" aria-expanded="false"><span>Paredes</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="ParedesSection" class="fieldset-hidden">
 
                 <label for="Paredes3">Cantidad de paredes de 3 metros(3$):</label>
@@ -81,7 +81,7 @@
         <hr> <!-- Línea separadora -->
         <!--MESAS-->
         <!--<form id="quoteForm">-->
-            <h2 onclick="toggleSection('MesasSection')">Mesas</h2>
+            <button type="button" class="section-toggle" data-section="MesasSection" aria-expanded="false"><span>Mesas</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="MesasSection" class="fieldset-hidden">
 
                 <label for="mesas">Cantidad de mesas (4$):</label>
@@ -104,7 +104,7 @@
         <hr> <!-- Línea separadora -->
         <!--MANTELERIA-->
         <!--<form id="quoteForm">-->
-        <h2 onclick="toggleSection('ManteleriaSection')">Manteleria</h2>
+        <button type="button" class="section-toggle" data-section="ManteleriaSection" aria-expanded="false"><span>Mantelería</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
         <fieldset id="ManteleriaSection" class="fieldset-hidden">
 
             <label for="vestidura">Cantidad de vestidura de las sillas (0.75$):</label>
@@ -128,7 +128,7 @@
         <hr> <!-- Línea separadora -->
         <!--SILLAS-->
        <!-- <form id="quoteForm">-->
-            <h2 onclick="toggleSection('SillasSection')">Sillas</h2>
+            <button type="button" class="section-toggle" data-section="SillasSection" aria-expanded="false"><span>Sillas</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="SillasSection" class="fieldset-hidden">
 
                 <label for="sillasSinVestir">Cantidad de sillas sin vestir (0.4$):</label>
@@ -155,7 +155,7 @@
         <hr> <!-- Línea separadora -->
         <!--PISTA DE BAILE-->
        <!-- <form id="quoteForm">-->
-            <h2 onclick="toggleSection('PistadeBaileSection')">Pista de Baile</h2>
+            <button type="button" class="section-toggle" data-section="PistadeBaileSection" aria-expanded="false"><span>Pista de Baile</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="PistadeBaileSection" class="fieldset-hidden">
 
                 <!-- Pista de Baile -->
@@ -170,7 +170,7 @@
         <hr> <!-- Línea separadora -->
         <!--SILLAS Y MESAS PARA NIÑOS-->
         <!--<form id="quoteForm">-->
-            <h2 onclick="toggleSection('SillasyMesasniniosSection')">Sillas y Mesas de Niños</h2>
+            <button type="button" class="section-toggle" data-section="SillasyMesasniniosSection" aria-expanded="false"><span>Sillas y Mesas de Niños</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="SillasyMesasniniosSection" class="fieldset-hidden">
 
                 <!-- Sillas de Niños y Mesas de Niños -->
@@ -192,7 +192,7 @@
 
 
         <!--MOBILIARIO-->
-        <h2 onclick="toggleSection('MobiliarioSection')">Mobiliario y otros</h2>
+        <button type="button" class="section-toggle" data-section="MobiliarioSection" aria-expanded="false"><span>Mobiliario y otros</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
         <fieldset id="MobiliarioSection" class="fieldset-hidden">
 
             <label for="mobiliario">Mobiliario de arco para globos y mesitas (25$):</label>
@@ -216,7 +216,7 @@
 
         <hr> <!-- Línea separadora -->
         <!--COMBOS-->
-        <h2 onclick="toggleSection('CombosSection')">Combos</h2>
+        <button type="button" class="section-toggle" data-section="CombosSection" aria-expanded="false"><span>Combos</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
         <fieldset id="CombosSection" class="fieldset-hidden">
 
             <label for="combo3x4">Cantidad de Carpa 3x4m (3 paredes) ($40):</label>
@@ -260,7 +260,7 @@
         <hr> <!-- Línea separadora -->
         <!--TRANSPORTE-->
         <!--<form id="quoteForm">-->
-            <h2 onclick="toggleSection('TransporteSection')">Transporte</h2>
+            <button type="button" class="section-toggle" data-section="TransporteSection" aria-expanded="false"><span>Transporte</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="TransporteSection" class="fieldset-hidden">
 
                 <label for="costoTransporte">Costo de transporte:</label>
@@ -271,7 +271,7 @@
         <hr> <!-- Línea separadora -->
 
          <!--DIAS ADICIONALES-->
-            <h2 onclick="toggleSection('Dias')">Dias Adicionales</h2>
+            <button type="button" class="section-toggle" data-section="Dias" aria-expanded="false"><span>Días adicionales</span><span class="section-summary"></span><span class="section-chevron" aria-hidden="true">›</span></button>
             <fieldset id="Dias" class="fieldset-hidden">
                 <div class="fieldset-container">
                 <div class="form-group">
@@ -307,8 +307,14 @@
         <span id="correoCliente"></span>-->
 
 
-    <!--TABLA DATOS DEL CLIENTE-->
     </form>
+    <section id="panelResultado" class="panel-resultado" hidden aria-live="polite">
+      <div class="resultado-cabecera">
+        <p class="resultado-etiqueta">Cotización lista</p>
+        <h2>Resumen para el cliente</h2>
+      </div>
+
+    <!--TABLA DATOS DEL CLIENTE-->
     <table id="datosClienteTabla">
         <tr>
         <td style="width: 100px;">Nombre:</td>
@@ -331,17 +337,16 @@
 
       <!--TABLA DE COTIZACION-->
     <div id="resultadoCotizacion"></div>
-    <div id="accionesCotizacion" class="acciones-cotizacion" hidden>
-        <button id="administrarCotizacion" type="button">Editar o añadir productos</button>
+    <div id="accionesCotizacion" class="acciones-cotizacion">
+        <button id="shareTableBtn" type="button" class="boton-whatsapp">
+            <img src="img/whatsapp.png" alt="" width="20" height="20">
+            Compartir por WhatsApp
+        </button>
+        <button id="downloadPDF" type="button" class="boton-accion-secundaria">Generar PDF</button>
+        <button id="administrarCotizacion" type="button" class="boton-accion-secundaria">Editar productos</button>
+        <button id="nuevaCotizacion" type="button" class="boton-texto">Nueva cotización</button>
     </div>
-    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 20px 0;">
-        <button id="downloadPDF" class="centered-button">Generar PDF</button>
-        <button id="shareTableBtn" class="centered-button" style="background:#25D366; color:white; display:flex; align-items:center; gap:8px;">
-    <img src="img/whatsapp.png" alt="WhatsApp" style="width:20px; height:20px;">
-    Compartir tabla
-</button>
-
-    </div>
+    </section>
 
     <!-- EDITOR DE LA COTIZACION (fuera de la tabla compartida) -->
     <div id="editorCotizacionModal" class="modal-editor" hidden>
@@ -351,11 +356,12 @@
                 <button id="cerrarEditorCotizacion" type="button" class="boton-cerrar" aria-label="Cerrar editor">✕</button>
             </div>
 
-            <p class="modal-editor__ayuda">Los cambios de precio se aplican únicamente a esta cotización.</p>
-            <div id="listaEditorCotizacion" class="lista-editor"></div>
+            <div class="modal-editor__contenido">
+              <p class="modal-editor__ayuda">Los cambios de precio se aplican únicamente a esta cotización.</p>
+              <div id="listaEditorCotizacion" class="lista-editor"></div>
 
-            <section class="producto-personalizado" aria-labelledby="tituloProductoPersonalizado">
-                <h3 id="tituloProductoPersonalizado">Añadir producto personalizado</h3>
+            <details class="producto-personalizado">
+              <summary id="tituloProductoPersonalizado">Añadir producto personalizado</summary>
                 <div class="producto-personalizado__campos">
                     <label>Producto
                         <input id="nuevoProductoNombre" type="text" maxlength="100" placeholder="Ej. Iluminación adicional">
@@ -368,9 +374,10 @@
                     </label>
                 </div>
                 <button id="agregarProductoPersonalizado" type="button">Añadir al detalle</button>
-            </section>
+            </details>
 
-            <p id="errorEditorCotizacion" class="error-editor" role="alert" aria-live="polite"></p>
+              <p id="errorEditorCotizacion" class="error-editor" role="alert" aria-live="polite"></p>
+            </div>
             <div class="modal-editor__acciones">
                 <button id="cancelarEditorCotizacion" type="button" class="boton-secundario">Cancelar</button>
                 <button id="guardarEditorCotizacion" type="button">Guardar cambios</button>

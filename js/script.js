@@ -19,13 +19,58 @@ function obtenerNumero(id) {
 
     return Number(valor);
 }
-function toggleSection(sectionId) {
-    var section = document.getElementById(sectionId);
-    if (section.style.display === "none" || section.style.display === "") {
-        section.style.display = "block";
-    } else {
-        section.style.display = "none";
+function toggleSection(sectionId, control) {
+    const section = document.getElementById(sectionId);
+    const estaAbierta = section.style.display === "block";
+
+    section.style.display = estaAbierta ? "none" : "block";
+    if (control) control.setAttribute('aria-expanded', String(!estaAbierta));
+}
+
+function actualizarResumenSeccion(sectionId) {
+    const section = document.getElementById(sectionId);
+    const control = document.querySelector(`[data-section="${sectionId}"]`);
+    if (!section || !control) return;
+
+    const resumen = control.querySelector('.section-summary');
+    const inputsConValor = Array.from(section.querySelectorAll('input')).filter(input => {
+        const valor = input.value.trim();
+        return valor !== '' && (input.type !== 'number' || Number(valor) > 0);
+    });
+
+    if (sectionId === 'DatosClienteSection') {
+        resumen.textContent = inputsConValor.length > 0 ? `${inputsConValor.length} datos completados` : '';
+        return;
     }
+
+    if (sectionId === 'TransporteSection') {
+        const valor = Number(document.getElementById('costoTransporte').value);
+        resumen.textContent = valor > 0 ? `$${valor.toFixed(2)}` : '';
+        return;
+    }
+
+    if (sectionId === 'Dias') {
+        const dias = Number(document.getElementById('dias').value);
+        resumen.textContent = dias > 0 ? `${dias} día${dias === 1 ? '' : 's'}` : '';
+        return;
+    }
+
+    const unidades = inputsConValor.reduce((total, input) => total + Number(input.value || 0), 0);
+    resumen.textContent = inputsConValor.length > 0
+        ? `${inputsConValor.length} seleccionado${inputsConValor.length === 1 ? '' : 's'} · ${unidades} unidad${unidades === 1 ? '' : 'es'}`
+        : '';
+}
+
+function configurarSecciones() {
+    document.querySelectorAll('.section-toggle').forEach(control => {
+        const sectionId = control.dataset.section;
+        control.setAttribute('aria-controls', sectionId);
+        control.addEventListener('click', () => toggleSection(sectionId, control));
+
+        document.getElementById(sectionId).addEventListener('input', () => {
+            actualizarResumenSeccion(sectionId);
+        });
+    });
 }
 
 
@@ -74,7 +119,28 @@ function mostrarDetalleCotizacion(detalle) {
 
     const resultadoElement = document.getElementById('resultadoCotizacion');
     resultadoElement.innerHTML = tableHtml;
-    document.getElementById('accionesCotizacion').hidden = detalle.length === 0;
+    document.getElementById('panelResultado').hidden = detalle.length === 0;
+}
+
+function iniciarNuevaCotizacion() {
+    if (!confirm('¿Deseas borrar la cotización actual y comenzar una nueva?')) return;
+
+    document.getElementById('quoteForm').reset();
+    cotizacionActual = [];
+    borradorCotizacion = [];
+    document.getElementById('resultadoCotizacion').innerHTML = '';
+    document.getElementById('panelResultado').hidden = true;
+
+    ['nombreClienteTd', 'cedulaClienteTd', 'direccionClienteTd', 'numeroClienteTd', 'correoClienteTd']
+        .forEach(id => document.getElementById(id).textContent = '');
+
+    document.querySelectorAll('.section-toggle').forEach(control => {
+        control.setAttribute('aria-expanded', 'false');
+        document.getElementById(control.dataset.section).style.display = 'none';
+        actualizarResumenSeccion(control.dataset.section);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function abrirEditorCotizacion() {
@@ -967,13 +1033,22 @@ if (cantidadComboMesaVestidaSillasVestidasSC > 0) {
 
     //enseña el detalle de la cotizacion
    cotizacionActual = prepararDetalleCotizacion(detalleCotizacion);
+
+   if (cotizacionActual.length === 0) {
+       document.getElementById('panelResultado').hidden = true;
+       alert('Selecciona al menos un producto o agrega un valor de transporte.');
+       return;
+   }
+
    mostrarDetalleCotizacion(cotizacionActual);
+   document.getElementById('panelResultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
     
 
 }
 
 //pdf
 document.addEventListener("DOMContentLoaded", function() {
+    configurarSecciones();
     const botonGenerarPDF = document.getElementById("downloadPDF");
     
     if (botonGenerarPDF) {
@@ -983,6 +1058,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     document.getElementById('administrarCotizacion').addEventListener('click', abrirEditorCotizacion);
+    document.getElementById('nuevaCotizacion').addEventListener('click', iniciarNuevaCotizacion);
     document.getElementById('cerrarEditorCotizacion').addEventListener('click', cerrarEditorCotizacion);
     document.getElementById('cancelarEditorCotizacion').addEventListener('click', cerrarEditorCotizacion);
     document.getElementById('guardarEditorCotizacion').addEventListener('click', guardarCambiosCotizacion);
