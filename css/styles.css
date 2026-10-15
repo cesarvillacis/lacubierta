@@ -275,10 +275,23 @@ body.modal-abierto {
 }
 
 .fila-editor {
+    position: relative;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #fafafa;
+}
+
+.fila-editor--recien-agregada {
+    border-color: #d3a000;
+    background: #fff8d9;
+    box-shadow: 0 0 0 4px rgba(211, 160, 0, 0.22), 0 8px 22px rgba(104, 78, 0, 0.16);
+    animation: destacar-producto-agregado 1.1s ease-in-out 2;
+}
+
+@keyframes destacar-producto-agregado {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.012); }
 }
 
 .fila-editor--eliminada {
@@ -372,7 +385,7 @@ body.modal-abierto {
 
 .producto-catalogo__contenido {
     display: grid;
-    grid-template-columns: 1fr 120px;
+    grid-template-columns: minmax(0, 1fr) 120px minmax(160px, 0.55fr);
     gap: 14px;
     padding: 18px;
 }
@@ -392,6 +405,19 @@ body.modal-abierto {
     border-radius: 4px;
     box-sizing: border-box;
     background: #fff;
+}
+
+.precio-catalogo-base {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    line-height: 1.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fila-editor--recien-agregada {
+        animation: none;
+    }
 }
 
 .producto-personalizado__ayuda {

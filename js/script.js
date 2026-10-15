@@ -232,6 +232,36 @@ function renderizarEditorCotizacion() {
     actualizarResumenEditor();
 }
 
+function enfocarProductoAgregado(idCotizacion) {
+    const contenidoModal = document.querySelector('.modal-editor__contenido');
+    const fila = document.querySelector(`.fila-editor[data-id="${idCotizacion}"]`);
+    if (!fila || !contenidoModal) return;
+
+    const reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    fila.classList.add('fila-editor--recien-agregada');
+
+    const desplazarHastaFila = () => {
+        fila.scrollIntoView({
+            behavior: reducirMovimiento ? 'auto' : 'smooth',
+            block: 'center'
+        });
+    };
+
+    requestAnimationFrame(desplazarHastaFila);
+    window.setTimeout(desplazarHastaFila, reducirMovimiento ? 0 : 320);
+
+    window.setTimeout(() => {
+        fila.classList.remove('fila-editor--recien-agregada');
+    }, reducirMovimiento ? 500 : 2200);
+}
+
+function ocultarTecladoMovil() {
+    const elementoActivo = document.activeElement;
+    if (elementoActivo instanceof HTMLElement && elementoActivo.matches('input, select, textarea')) {
+        elementoActivo.blur();
+    }
+}
+
 function actualizarBorradorDesdeInput(evento) {
     const input = evento.target.closest('[data-campo]');
     const fila = evento.target.closest('[data-id]');
@@ -289,8 +319,9 @@ function agregarProductoPersonalizado() {
         return;
     }
 
+    const idCotizacion = `personalizado-${siguienteIdCotizacion++}`;
     borradorCotizacion.push({
-        idCotizacion: `personalizado-${siguienteIdCotizacion++}`,
+        idCotizacion,
         producto: nombre,
         cantidad,
         precioBase: null,
@@ -303,7 +334,9 @@ function agregarProductoPersonalizado() {
     cantidadInput.value = '';
     precioInput.value = '';
     error.textContent = '';
+    ocultarTecladoMovil();
     renderizarEditorCotizacion();
+    enfocarProductoAgregado(idCotizacion);
 }
 
 function obtenerCatalogoFormulario() {
@@ -336,6 +369,8 @@ function obtenerCatalogoFormulario() {
 
 function renderizarCatalogoDisponible() {
     const select = document.getElementById('productoCatalogoSelect');
+    const precioInput = document.getElementById('productoCatalogoPrecio');
+    const precioBase = document.getElementById('productoCatalogoPrecioBase');
     const catalogo = obtenerCatalogoFormulario().filter(producto => {
         const yaSeleccionadoEnFormulario = Number(document.getElementById(producto.codigo)?.value || 0) > 0;
         const yaAgregado = borradorCotizacion.some(item => !item.eliminado && item.codigoCatalogo === producto.codigo);
@@ -345,6 +380,9 @@ function renderizarCatalogoDisponible() {
     if (catalogo.length === 0) {
         select.innerHTML = '<option value="">No hay más productos disponibles</option>';
         select.disabled = true;
+        precioInput.value = '';
+        precioInput.disabled = true;
+        precioBase.textContent = 'No hay productos disponibles.';
         return;
     }
 
@@ -352,34 +390,59 @@ function renderizarCatalogoDisponible() {
     select.innerHTML = '<option value="">Selecciona un producto</option>' + catalogo.map(producto =>
         `<option value="${producto.codigo}">${escaparHtml(producto.categoria)} · ${escaparHtml(producto.nombre)} — $${producto.precio.toFixed(2)}</option>`
     ).join('');
+    precioInput.value = '';
+    precioInput.disabled = true;
+    precioBase.textContent = 'El precio base aparecerá aquí.';
+}
+
+function actualizarPrecioProductoCatalogo() {
+    const select = document.getElementById('productoCatalogoSelect');
+    const precioInput = document.getElementById('productoCatalogoPrecio');
+    const precioBase = document.getElementById('productoCatalogoPrecioBase');
+    const producto = obtenerCatalogoFormulario().find(item => item.codigo === select.value);
+
+    if (!producto) {
+        precioInput.value = '';
+        precioInput.disabled = true;
+        precioBase.textContent = 'El precio base aparecerá aquí.';
+        return;
+    }
+
+    precioInput.disabled = false;
+    precioInput.value = producto.precio.toFixed(2);
+    precioBase.textContent = `Precio base: $${producto.precio.toFixed(2)}. Puedes cambiarlo solo para esta cotización.`;
 }
 
 function agregarProductoCatalogo() {
     const select = document.getElementById('productoCatalogoSelect');
     const cantidad = Number(document.getElementById('productoCatalogoCantidad').value);
+    const precioAplicado = Number(document.getElementById('productoCatalogoPrecio').value);
     const producto = obtenerCatalogoFormulario().find(item => item.codigo === select.value);
     const error = document.getElementById('errorEditorCotizacion');
 
-    if (!producto || !Number.isFinite(cantidad) || cantidad <= 0) {
-        error.textContent = 'Selecciona un producto y escribe una cantidad mayor que cero.';
+    if (!producto || !Number.isFinite(cantidad) || cantidad <= 0 || !Number.isFinite(precioAplicado) || precioAplicado < 0) {
+        error.textContent = 'Selecciona un producto, una cantidad mayor que cero y un precio válido.';
         return;
     }
 
+    const idCotizacion = `catalogo-${siguienteIdCotizacion++}`;
     borradorCotizacion.push({
-        idCotizacion: `catalogo-${siguienteIdCotizacion++}`,
+        idCotizacion,
         codigoCatalogo: producto.codigo,
         producto: producto.nombre,
         cantidad,
         precioBase: producto.precio,
-        precioIndividual: producto.precio,
-        precioTotal: cantidad * producto.precio,
+        precioIndividual: precioAplicado,
+        precioTotal: cantidad * precioAplicado,
         personalizado: false,
         eliminado: false
     });
     document.getElementById('productoCatalogoCantidad').value = '1';
     error.textContent = '';
+    ocultarTecladoMovil();
     renderizarEditorCotizacion();
     renderizarCatalogoDisponible();
+    enfocarProductoAgregado(idCotizacion);
 }
 
 function guardarCambiosCotizacion() {
@@ -1204,6 +1267,9 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('guardarEditorCotizacion').addEventListener('click', guardarCambiosCotizacion);
     document.getElementById('agregarProductoPersonalizado').addEventListener('click', agregarProductoPersonalizado);
     document.getElementById('agregarProductoCatalogo').addEventListener('click', agregarProductoCatalogo);
+    document.getElementById('agregarProductoPersonalizado').addEventListener('pointerdown', ocultarTecladoMovil);
+    document.getElementById('agregarProductoCatalogo').addEventListener('pointerdown', ocultarTecladoMovil);
+    document.getElementById('productoCatalogoSelect').addEventListener('change', actualizarPrecioProductoCatalogo);
     document.getElementById('listaEditorCotizacion').addEventListener('input', actualizarBorradorDesdeInput);
     document.getElementById('listaEditorCotizacion').addEventListener('click', eliminarItemDelBorrador);
     document.getElementById('editorCotizacionModal').addEventListener('click', function(evento) {
