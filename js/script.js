@@ -153,11 +153,18 @@ function abrirEditorCotizacion() {
     document.getElementById('errorEditorCotizacion').textContent = '';
     renderizarEditorCotizacion();
     document.getElementById('editorCotizacionModal').hidden = false;
+    document.body.classList.add('modal-abierto');
 }
 
 function cerrarEditorCotizacion() {
     document.getElementById('editorCotizacionModal').hidden = true;
+    document.body.classList.remove('modal-abierto');
     borradorCotizacion = [];
+}
+
+function actualizarResumenEditor() {
+    const total = calcularTotalCotizacion(borradorCotizacion);
+    document.getElementById('totalBorradorCotizacion').textContent = `$${total.toFixed(2)}`;
 }
 
 function renderizarEditorCotizacion() {
@@ -165,6 +172,7 @@ function renderizarEditorCotizacion() {
 
     if (borradorCotizacion.length === 0) {
         contenedor.innerHTML = '<p>No hay productos. Añade uno personalizado para continuar.</p>';
+        actualizarResumenEditor();
         return;
     }
 
@@ -194,6 +202,7 @@ function renderizarEditorCotizacion() {
                 </div>
             </article>`;
     }).join('');
+    actualizarResumenEditor();
 }
 
 function actualizarBorradorDesdeInput(evento) {
@@ -207,6 +216,7 @@ function actualizarBorradorDesdeInput(evento) {
     item[input.dataset.campo] = Number(input.value);
     const subtotal = fila.querySelector('[data-campo="subtotal"]');
     subtotal.value = `$${((item.cantidad || 0) * (item.precioIndividual || 0)).toFixed(2)}`;
+    actualizarResumenEditor();
 }
 
 function eliminarItemDelBorrador(evento) {
