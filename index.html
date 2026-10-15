@@ -21,16 +21,16 @@
 
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre">
-    
+
                 <label for="cedula">Cédula:</label>
                 <input type="text" id="cedula" name="cedula">
-    
+
                 <label for="direccion">Dirección:</label>
                 <input type="text" id="direccion" name="direccion">
-    
+
                 <label for="numero">Número de Teléfono:</label>
                 <input type="tel" id="numero" name="numero">
-    
+
                 <label for="correo">Correo Electrónico:</label>
                 <input type="email" id="correo" name="correo">
                 </fieldset>
@@ -55,7 +55,7 @@
         <label for="carpas6x8">Cantidad de carpas 6x8(50$):</label>
         <input type="number" id="carpas6x8" name="carpas6x8" min="0" >
         <br>
-        
+
         </fieldset>
 
         <hr> <!-- Línea separadora -->
@@ -67,7 +67,7 @@
                 <label for="Paredes3">Cantidad de paredes de 3 metros(3$):</label>
                 <input type="number" id="paredes3" name="paredes3" min="0">
                 <br>
-        
+
                 <label for="paredes4">Cantidad de paredes de 4 metros(4$):</label>
                 <input type="number" id="paredes4" name="paredes4" min="0" >
                 <br>
@@ -91,7 +91,7 @@
                 <label for="mesas">Cantidad de mesas (4.5$):</label>
                 <input type="number" id="mesas_4_5_dolar" name="mesas" min="0" >
                 <br>
-        
+
                 <label for="mesasVestidas">Cantidad de mesas vestidas (7.5$):</label>
                 <input type="number" id="mesasVestidas" name="mesasVestidas" min="0">
                 <br>
@@ -110,7 +110,7 @@
             <label for="vestidura">Cantidad de vestidura de las sillas (0.75$):</label>
             <input type="number" id="vestidura" name="vestidura" min="0" >
             <br>
-    
+
             <label for="lazo">Cantidad de lazos (0.25$):</label>
             <input type="number" id="lazo" name="lazo" min="0" >
             <br>
@@ -134,11 +134,11 @@
                 <label for="sillasSinVestir">Cantidad de sillas sin vestir (0.4$):</label>
                 <input type="number" id="sillasSinVestir" name="sillasSinVestir" min="0" >
                 <br>
-        
+
                 <label for="sillasSinVestir">Cantidad de sillas sin vestir (0.3$):</label>
                 <input type="number" id="sillasSinVestirclientes" name="sillasSinVestirclientes" min="0" >
                 <br>
-        
+
                 <label for="sillasVestidas">Cantidad de sillas vestidas (1$):</label>
                 <input type="number" id="sillasVestidas" name="sillasVestidas" min="0">
                 <br>
@@ -172,12 +172,12 @@
         <!--<form id="quoteForm">-->
             <h2 onclick="toggleSection('SillasyMesasniniosSection')">Sillas y Mesas de Niños</h2>
             <fieldset id="SillasyMesasniniosSection" class="fieldset-hidden">
-   
+
                 <!-- Sillas de Niños y Mesas de Niños -->
                 <label for="sillasNinos">Cantidad de sillas de niños (0.3$):</label>
                 <input type="number" id="sillasNinos" name="sillasNinos" min="0">
                 <br>
-        
+
                 <label for="mesasNinos">Cantidad de mesas de niños (2$):</label>
                 <input type="number" id="mesasNinos" name="mesasNinos" min="0" >
                 <br>
@@ -209,10 +209,10 @@
             <label for="jarra"> Cantidad de Jarras (0.25$):</label>
             <input type="number" id="jarra" name="jarra"  min="0">
             <br>
-        
+
         </fieldset>
 
-   
+
 
         <hr> <!-- Línea separadora -->
         <!--COMBOS-->
@@ -282,14 +282,14 @@
                 <label>Valor por dia:</label>
                 <input type="number" id="valorxDia" name="valorxDia" min="0">
             </div>
-            </div>              
+            </div>
 
         </fieldset>
-        
+
 
         <!--BOTON PARA CALCULAR-->
         <button type="button" onclick="calcularCotizacion()" class="centered-button">Calcular Cotización</button>
-        
+
 
         <!--<label for="nombreCliente">Nombre:</label>
         <span id="nombreCliente"></span>
@@ -306,7 +306,7 @@
         <label for="correoCliente">Correo Electrónico:</label>
         <span id="correoCliente"></span>-->
 
-    
+
     <!--TABLA DATOS DEL CLIENTE-->
     </form>
     <table id="datosClienteTabla">
@@ -331,6 +331,9 @@
 
       <!--TABLA DE COTIZACION-->
     <div id="resultadoCotizacion"></div>
+    <div id="accionesCotizacion" class="acciones-cotizacion" hidden>
+        <button id="administrarCotizacion" type="button">Editar o añadir productos</button>
+    </div>
     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 20px 0;">
         <button id="downloadPDF" class="centered-button">Generar PDF</button>
         <button id="shareTableBtn" class="centered-button" style="background:#25D366; color:white; display:flex; align-items:center; gap:8px;">
@@ -338,6 +341,41 @@
     Compartir tabla
 </button>
 
+    </div>
+
+    <!-- EDITOR DE LA COTIZACION (fuera de la tabla compartida) -->
+    <div id="editorCotizacionModal" class="modal-editor" hidden>
+        <div class="modal-editor__panel" role="dialog" aria-modal="true" aria-labelledby="editorCotizacionTitulo">
+            <div class="modal-editor__cabecera">
+                <h2 id="editorCotizacionTitulo">Administrar cotización</h2>
+                <button id="cerrarEditorCotizacion" type="button" class="boton-cerrar" aria-label="Cerrar editor">✕</button>
+            </div>
+
+            <p class="modal-editor__ayuda">Los cambios de precio se aplican únicamente a esta cotización.</p>
+            <div id="listaEditorCotizacion" class="lista-editor"></div>
+
+            <section class="producto-personalizado" aria-labelledby="tituloProductoPersonalizado">
+                <h3 id="tituloProductoPersonalizado">Añadir producto personalizado</h3>
+                <div class="producto-personalizado__campos">
+                    <label>Producto
+                        <input id="nuevoProductoNombre" type="text" maxlength="100" placeholder="Ej. Iluminación adicional">
+                    </label>
+                    <label>Cantidad
+                        <input id="nuevoProductoCantidad" type="number" min="0.01" step="0.01" inputmode="decimal">
+                    </label>
+                    <label>Precio unitario
+                        <input id="nuevoProductoPrecio" type="number" min="0" step="0.01" inputmode="decimal">
+                    </label>
+                </div>
+                <button id="agregarProductoPersonalizado" type="button">Añadir al detalle</button>
+            </section>
+
+            <p id="errorEditorCotizacion" class="error-editor" role="alert" aria-live="polite"></p>
+            <div class="modal-editor__acciones">
+                <button id="cancelarEditorCotizacion" type="button" class="boton-secundario">Cancelar</button>
+                <button id="guardarEditorCotizacion" type="button">Guardar cambios</button>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL PARA VISTA PREVIA DEL PDF -->
