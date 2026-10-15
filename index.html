@@ -362,8 +362,10 @@
 
             <details class="producto-personalizado">
               <summary id="tituloProductoPersonalizado">Añadir producto personalizado</summary>
+              <div class="producto-personalizado__contenido">
+                <p class="producto-personalizado__ayuda">Úsalo para incluir un servicio o artículo que no aparece en el formulario principal.</p>
                 <div class="producto-personalizado__campos">
-                    <label>Producto
+                    <label class="producto-personalizado__nombre">Nombre del producto
                         <input id="nuevoProductoNombre" type="text" maxlength="100" placeholder="Ej. Iluminación adicional">
                     </label>
                     <label>Cantidad
@@ -373,7 +375,8 @@
                         <input id="nuevoProductoPrecio" type="number" min="0" step="0.01" inputmode="decimal">
                     </label>
                 </div>
-                <button id="agregarProductoPersonalizado" type="button">Añadir al detalle</button>
+                <button id="agregarProductoPersonalizado" type="button" class="boton-agregar-producto"><span aria-hidden="true">＋</span> Añadir a la cotización</button>
+              </div>
             </details>
 
               <p id="errorEditorCotizacion" class="error-editor" role="alert" aria-live="polite"></p>
